@@ -1,0 +1,1863 @@
+name: Build Railworks
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.10.2
+
+      - name: Generate project files (Gradle settings, Brass tracks and bogeys, Ponder scenes, textures, icon)
+        run: |
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/obj_track.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/obj_track.json' <<'EOF_1'
+          {"ambientocclusion":false,"textures":{"0":"railworks:block/brass_track","1":"railworks:block/brass_track_mip","2":"railworks:block/brass_track_crossing","particle":"create:block/palettes/stone_types/polished/andesite_cut_polished"}}
+          EOF_1
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/tie.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/tie.json' <<'EOF_2'
+          {"parent":"railworks:block/track/brass/obj_track","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/tie.obj","render_type":"minecraft:cutout_mipped"}
+          EOF_2
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/segment_left.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/segment_left.json' <<'EOF_3'
+          {"parent":"railworks:block/track/brass/obj_track","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/segment_left.obj"}
+          EOF_3
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/segment_right.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/segment_right.json' <<'EOF_4'
+          {"parent":"railworks:block/track/brass/obj_track","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/segment_right.obj"}
+          EOF_4
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/cross_d1_xo.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/cross_d1_xo.json' <<'EOF_5'
+          {"parent":"railworks:block/track/brass/obj_track","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/cross_d1_xo.obj"}
+          EOF_5
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/cross_d1_zo.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/cross_d1_zo.json' <<'EOF_6'
+          {"parent":"railworks:block/track/brass/obj_track","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/cross_d1_zo.obj"}
+          EOF_6
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/cross_d2_xo.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/cross_d2_xo.json' <<'EOF_7'
+          {"parent":"railworks:block/track/brass/obj_track","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/cross_d2_xo.obj"}
+          EOF_7
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/cross_d2_zo.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/cross_d2_zo.json' <<'EOF_8'
+          {"parent":"railworks:block/track/brass/obj_track","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/cross_d2_zo.obj"}
+          EOF_8
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/cross_diag.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/cross_diag.json' <<'EOF_9'
+          {"parent":"railworks:block/track/brass/obj_track","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/cross_diag.obj"}
+          EOF_9
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/diag.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/diag.json' <<'EOF_10'
+          {"parent":"railworks:block/track/brass/obj_track","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/diag.obj"}
+          EOF_10
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/diag_2.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/diag_2.json' <<'EOF_11'
+          {"parent":"railworks:block/track/brass/obj_track","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/diag_2.obj"}
+          EOF_11
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/ascending.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/ascending.json' <<'EOF_12'
+          {"loader":"neoforge:obj","ambientocclusion":false,"flip_v":true,"model":"create:models/block/track/ascending.obj","textures":{"0":"railworks:block/brass_track","1":"railworks:block/brass_track_mip","particle":"create:block/palettes/stone_types/polished/andesite_cut_polished"}}
+          EOF_12
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/x_ortho.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/x_ortho.json' <<'EOF_13'
+          {"parent":"create:block/track/x_ortho","textures":{"1":"railworks:block/brass_track","2":"railworks:block/brass_track_mip","particle":"create:block/palettes/stone_types/polished/andesite_cut_polished"}}
+          EOF_13
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/z_ortho.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/z_ortho.json' <<'EOF_14'
+          {"parent":"create:block/track/z_ortho","textures":{"1":"railworks:block/brass_track","2":"railworks:block/brass_track_mip","particle":"create:block/palettes/stone_types/polished/andesite_cut_polished"}}
+          EOF_14
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass/cross_ortho.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass/cross_ortho.json' <<'EOF_15'
+          {"parent":"create:block/track/cross_ortho","textures":{"1":"railworks:block/brass_track","2":"railworks:block/brass_track_mip","3":"railworks:block/brass_track_crossing","particle":"railworks:block/brass_track_crossing"}}
+          EOF_15
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/blockstates/brass_track.json')"
+          cat > 'src/main/resources/assets/railworks/blockstates/brass_track.json' <<'EOF_16'
+          {"variants":{"shape=ae,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/ascending","y":270},"shape=ae,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/ascending","y":270},"shape=ae,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/ascending","y":270},"shape=ae,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/ascending","y":270},"shape=an,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/ascending","y":180},"shape=an,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/ascending","y":180},"shape=an,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/ascending","y":180},"shape=an,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/ascending","y":180},"shape=as,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/ascending"},"shape=as,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/ascending"},"shape=as,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/ascending"},"shape=as,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/ascending"},"shape=aw,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/ascending","y":90},"shape=aw,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/ascending","y":90},"shape=aw,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/ascending","y":90},"shape=aw,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/ascending","y":90},"shape=cr_d,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/cross_diag"},"shape=cr_d,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/cross_diag"},"shape=cr_d,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/cross_diag"},"shape=cr_d,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/cross_diag"},"shape=cr_ndx,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/cross_d2_xo"},"shape=cr_ndx,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/cross_d2_xo"},"shape=cr_ndx,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/cross_d2_xo"},"shape=cr_ndx,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/cross_d2_xo"},"shape=cr_ndz,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/cross_d2_zo"},"shape=cr_ndz,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/cross_d2_zo"},"shape=cr_ndz,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/cross_d2_zo"},"shape=cr_ndz,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/cross_d2_zo"},"shape=cr_o,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/cross_ortho"},"shape=cr_o,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/cross_ortho"},"shape=cr_o,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/cross_ortho"},"shape=cr_o,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/cross_ortho"},"shape=cr_pdx,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/cross_d1_xo"},"shape=cr_pdx,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/cross_d1_xo"},"shape=cr_pdx,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/cross_d1_xo"},"shape=cr_pdx,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/cross_d1_xo"},"shape=cr_pdz,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/cross_d1_zo"},"shape=cr_pdz,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/cross_d1_zo"},"shape=cr_pdz,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/cross_d1_zo"},"shape=cr_pdz,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/cross_d1_zo"},"shape=nd,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/diag_2"},"shape=nd,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/diag_2"},"shape=nd,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/diag_2"},"shape=nd,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/diag_2"},"shape=none,turn=false,waterlogged=false":{"model":"minecraft:block/air"},"shape=none,turn=false,waterlogged=true":{"model":"minecraft:block/air"},"shape=none,turn=true,waterlogged=false":{"model":"minecraft:block/air"},"shape=none,turn=true,waterlogged=true":{"model":"minecraft:block/air"},"shape=pd,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/diag"},"shape=pd,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/diag"},"shape=pd,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/diag"},"shape=pd,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/diag"},"shape=te,turn=false,waterlogged=false":{"model":"create:block/track/teleport","y":270},"shape=te,turn=false,waterlogged=true":{"model":"create:block/track/teleport","y":270},"shape=te,turn=true,waterlogged=false":{"model":"create:block/track/teleport","y":270},"shape=te,turn=true,waterlogged=true":{"model":"create:block/track/teleport","y":270},"shape=tn,turn=false,waterlogged=false":{"model":"create:block/track/teleport","y":180},"shape=tn,turn=false,waterlogged=true":{"model":"create:block/track/teleport","y":180},"shape=tn,turn=true,waterlogged=false":{"model":"create:block/track/teleport","y":180},"shape=tn,turn=true,waterlogged=true":{"model":"create:block/track/teleport","y":180},"shape=ts,turn=false,waterlogged=false":{"model":"create:block/track/teleport"},"shape=ts,turn=false,waterlogged=true":{"model":"create:block/track/teleport"},"shape=ts,turn=true,waterlogged=false":{"model":"create:block/track/teleport"},"shape=ts,turn=true,waterlogged=true":{"model":"create:block/track/teleport"},"shape=tw,turn=false,waterlogged=false":{"model":"create:block/track/teleport","y":90},"shape=tw,turn=false,waterlogged=true":{"model":"create:block/track/teleport","y":90},"shape=tw,turn=true,waterlogged=false":{"model":"create:block/track/teleport","y":90},"shape=tw,turn=true,waterlogged=true":{"model":"create:block/track/teleport","y":90},"shape=xo,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/x_ortho"},"shape=xo,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/x_ortho"},"shape=xo,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/x_ortho"},"shape=xo,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/x_ortho"},"shape=zo,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/z_ortho"},"shape=zo,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/z_ortho"},"shape=zo,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/z_ortho"},"shape=zo,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/z_ortho"}}}
+          EOF_16
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/blockstates/brass_bogey.json')"
+          cat > 'src/main/resources/assets/railworks/blockstates/brass_bogey.json' <<'EOF_17'
+          {"variants":{"axis=x,waterlogged=false":{"model":"create:block/track/bogey/top","y":90},"axis=x,waterlogged=true":{"model":"create:block/track/bogey/top","y":90},"axis=z,waterlogged=false":{"model":"create:block/track/bogey/top"},"axis=z,waterlogged=true":{"model":"create:block/track/bogey/top"}}}
+          EOF_17
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/item/brass_track.json')"
+          cat > 'src/main/resources/assets/railworks/models/item/brass_track.json' <<'EOF_18'
+          {"parent":"minecraft:item/generated","textures":{"layer0":"railworks:item/brass_track"}}
+          EOF_18
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/bogey/frame.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/bogey/frame.json' <<'EOF_19'
+          {"parent":"create:block/track/bogey/textures","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/bogey/bogey_frame.obj","textures":{"bogey":"railworks:block/bogey/frame","bogey2":"railworks:block/bogey/frame2","wheel":"railworks:block/bogey/wheel"}}
+          EOF_19
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/bogey/wheel.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/bogey/wheel.json' <<'EOF_20'
+          {"parent":"create:block/track/bogey/textures","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/bogey/bogey_wheel.obj","textures":{"bogey":"railworks:block/bogey/frame","bogey2":"railworks:block/bogey/frame2","wheel":"railworks:block/bogey/wheel"}}
+          EOF_20
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/lang/en_us.json')"
+          cat > 'src/main/resources/assets/railworks/lang/en_us.json' <<'EOF_21'
+          {
+            "block.railworks.brass_track": "Brass Train Track",
+            "block.railworks.brass_minecart_track": "Brass Minecart Gauge Track",
+            "block.railworks.brass_bogey": "Brass Bogey",
+            "block.railworks.brass_minecart_bogey": "Brass Minecart Bogey",
+            "itemGroup.railworks": "Railworks",
+            "railworks.bogey.style.brass": "Brass",
+            "railworks.bogey.style.brass_minecart": "Brass Minecart",
+            "key.categories.railworks": "Railworks",
+            "key.railworks.switch_bogey": "Switch bogey type (hold a Railway Casing, look at a bogey)",
+            "railworks.switch.done": "Bogey switched to %s",
+            "railworks.switch.not_bogey": "Look at a bogey while holding a Railway Casing",
+            "railworks.switch.only_one": "No other bogey type to switch to",
+            "railworks.ponder.brass_track.header": "Brass Train Track",
+            "railworks.ponder.brass_track.text_1": "Brass Train Track is laid down just like any other Create track",
+            "railworks.ponder.brass_track.text_2": "Brass Bogeys ride on it...",
+            "railworks.ponder.brass_track.text_3": "...and on regular Create tracks too, so mixing track types no longer derails the train",
+            "railworks.ponder.minecart_gauge.header": "Brass Minecart Gauge Track",
+            "railworks.ponder.minecart_gauge.text_1": "The Minecart Gauge track is the narrow Steam 'n' Rails gauge, in Brass style (right)",
+            "railworks.ponder.minecart_gauge.text_2": "The Brass Minecart Bogey is the matching narrow bogey",
+            "railworks.ponder.minecart_gauge.text_3": "Only narrow gauge bogeys can ride it. A Brass Track can be crafted into a Minecart Gauge Track and back",
+            "railworks.ponder.bogey_switch.header": "Switching Bogey Types",
+            "railworks.ponder.bogey_switch.text_1": "Hold a Railway Casing and look at a bogey",
+            "railworks.ponder.bogey_switch.text_2": "Press Left Alt to switch it to the next bogey type of the same size and gauge",
+            "railworks.ponder.bogey_switch.text_3": "Bogeys from other Create addons are included. The key can be rebound in the Controls menu",
+            "railworks.ponder.railway_casing.header": "Railway Casing",
+            "railworks.ponder.railway_casing.text_1": "The Railway Casing is the key item for Railworks bogeys. Brass Bogeys have no item of their own and drop a Railway Casing when broken",
+            "railworks.ponder.railway_casing.text_2": "Hold it while looking at a bogey to change the bogey type. The next scene shows how"
+          }
+          EOF_21
+          mkdir -p "$(dirname 'src/main/resources/data/railworks/loot_table/blocks/brass_track.json')"
+          cat > 'src/main/resources/data/railworks/loot_table/blocks/brass_track.json' <<'EOF_22'
+          {"type":"minecraft:block","pools":[{"bonus_rolls":0.0,"conditions":[{"condition":"minecraft:survives_explosion"}],"entries":[{"type":"minecraft:item","name":"railworks:brass_track"}],"rolls":1.0}],"random_sequence":"railworks:blocks/brass_track"}
+          EOF_22
+          mkdir -p "$(dirname 'src/main/resources/data/railworks/loot_table/blocks/brass_bogey.json')"
+          cat > 'src/main/resources/data/railworks/loot_table/blocks/brass_bogey.json' <<'EOF_23'
+          {"type":"minecraft:block","pools":[{"bonus_rolls":0.0,"conditions":[{"condition":"minecraft:survives_explosion"}],"entries":[{"type":"minecraft:item","name":"create:railway_casing"}],"rolls":1.0}],"random_sequence":"railworks:blocks/brass_bogey"}
+          EOF_23
+          mkdir -p "$(dirname 'src/main/resources/data/create/tags/block/tracks.json')"
+          cat > 'src/main/resources/data/create/tags/block/tracks.json' <<'EOF_24'
+          {"values":["railworks:brass_track","railworks:brass_minecart_track"]}
+          EOF_24
+          mkdir -p "$(dirname 'src/main/resources/data/create/tags/block/girdable_tracks.json')"
+          cat > 'src/main/resources/data/create/tags/block/girdable_tracks.json' <<'EOF_25'
+          {"values":["railworks:brass_track","railworks:brass_minecart_track"]}
+          EOF_25
+          mkdir -p "$(dirname 'src/main/resources/data/create/tags/item/tracks.json')"
+          cat > 'src/main/resources/data/create/tags/item/tracks.json' <<'EOF_26'
+          {"values":["railworks:brass_track","railworks:brass_minecart_track"]}
+          EOF_26
+          mkdir -p "$(dirname 'src/main/resources/data/c/tags/block/relocation_not_supported.json')"
+          cat > 'src/main/resources/data/c/tags/block/relocation_not_supported.json' <<'EOF_27'
+          {"values":["railworks:brass_track","railworks:brass_minecart_track"]}
+          EOF_27
+          mkdir -p "$(dirname 'src/main/resources/data/minecraft/tags/block/mineable/pickaxe.json')"
+          cat > 'src/main/resources/data/minecraft/tags/block/mineable/pickaxe.json' <<'EOF_28'
+          {"values":["railworks:brass_track","railworks:brass_minecart_track","railworks:brass_bogey","railworks:brass_minecart_bogey"]}
+          EOF_28
+          mkdir -p "$(dirname 'src/main/resources/data/railworks/recipe/brass_track.json')"
+          cat > 'src/main/resources/data/railworks/recipe/brass_track.json' <<'EOF_29'
+          {"type":"minecraft:crafting_shaped","category":"misc","pattern":["N N","BBB"],"key":{"N":{"item":"minecraft:iron_nugget"},"B":{"item":"create:brass_ingot"}},"result":{"id":"railworks:brass_track","count":6}}
+          EOF_29
+          mkdir -p "$(dirname 'settings.gradle')"
+          cat > 'settings.gradle' <<'EOF_30'
+          rootProject.name = 'railworks'
+          EOF_30
+          mkdir -p "$(dirname 'build.gradle')"
+          cat > 'build.gradle' <<'EOF_31'
+          plugins {
+              id 'java'
+              id 'net.neoforged.moddev' version '2.0.+'
+          }
+
+          version = '1.4.0'
+          group = 'com.example.railworks'
+          base { archivesName = 'railworks' }
+          java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+          repositories {
+              mavenCentral()
+              maven { url = 'https://maven.createmod.net' }
+              maven { url = 'https://maven.ithundxr.dev/snapshots' }
+          }
+
+          neoForge {
+              version = '21.1.219'
+              mods { railworks { sourceSet sourceSets.main } }
+          }
+
+          dependencies {
+              implementation("com.simibubi.create:create-1.21.1:6.0.10-279:slim") { transitive = false }
+              implementation("net.createmod.ponder:ponder-neoforge:1.0.82+mc1.21.1")
+              compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-1.21.1:1.0.6")
+              runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-1.21.1:1.0.6")
+              implementation("com.tterrag.registrate:Registrate:MC1.21-1.3.0+67")
+          }
+          EOF_31
+          mkdir -p "$(dirname 'src/main/resources/META-INF/neoforge.mods.toml')"
+          cat > 'src/main/resources/META-INF/neoforge.mods.toml' <<'EOF_32'
+          modLoader = "javafml"
+          loaderVersion = "[1,)"
+          license = "MIT"
+
+          [[mods]]
+          modId = "railworks"
+          version = "1.4.0"
+          displayName = "Railworks"
+          description = '''A Create addon: Brass and Brass Minecart Gauge train tracks with matching bogeys, plus Ponder scenes. The Minecart Gauge uses the Steam 'n' Rails narrow gauge.'''
+          logoFile = "logo.png"
+          authors = "You"
+
+          [[dependencies.railworks]]
+          modId = "neoforge"
+          type = "required"
+          versionRange = "[21.1,)"
+          ordering = "NONE"
+          side = "BOTH"
+
+          [[dependencies.railworks]]
+          modId = "minecraft"
+          type = "required"
+          versionRange = "[1.21.1,1.22)"
+          ordering = "NONE"
+          side = "BOTH"
+
+          [[dependencies.railworks]]
+          modId = "create"
+          type = "required"
+          versionRange = "[6.0.6,)"
+          ordering = "AFTER"
+          side = "BOTH"
+
+          [[dependencies.railworks]]
+          modId = "railways"
+          type = "required"
+          versionRange = "[0,)"
+          ordering = "AFTER"
+          side = "BOTH"
+          EOF_32
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/Railworks.java')"
+          cat > 'src/main/java/com/example/railworks/Railworks.java' <<'EOF_33'
+          package com.example.railworks;
+
+          import com.simibubi.create.AllBlocks;
+          import com.simibubi.create.content.trains.track.TrackBlockItem;
+          import com.simibubi.create.foundation.data.CreateRegistrate;
+
+          import net.minecraft.core.registries.Registries;
+          import net.minecraft.network.chat.Component;
+          import net.minecraft.resources.ResourceLocation;
+          import net.minecraft.world.item.CreativeModeTab;
+          import net.minecraft.world.item.Item;
+          import net.minecraft.world.item.ItemStack;
+          import net.neoforged.bus.api.IEventBus;
+          import net.neoforged.api.distmarker.Dist;
+          import net.neoforged.fml.common.Mod;
+          import net.neoforged.fml.loading.FMLEnvironment;
+          import net.neoforged.neoforge.registries.DeferredItem;
+          import net.neoforged.neoforge.registries.DeferredRegister;
+
+          import java.util.function.Supplier;
+
+          @Mod(Railworks.MODID)
+          public class Railworks {
+              public static final String MODID = "railworks";
+              public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID);
+
+              public static final DeferredRegister<CreativeModeTab> TABS =
+                      DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+              public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
+
+              /**
+               * The Brass Track item is registered here, not through Registrate. Registrate adds every item it
+               * registers to a creative tab by itself, which clashed with the tab below and crashed the game when
+               * the inventory opened. Now the tab below is the only thing that puts items into it.
+               */
+              public static final DeferredItem<Item> BRASS_TRACK_ITEM = ITEMS.register("brass_track",
+                      () -> new TrackBlockItem(RWBlocks.BRASS_TRACK.get(), new Item.Properties()));
+
+              public static final DeferredItem<Item> BRASS_MINECART_TRACK_ITEM = ITEMS.register("brass_minecart_track",
+                      () -> new TrackBlockItem(RWBlocks.BRASS_MINECART_TRACK.get(), new Item.Properties()));
+
+              public static final Supplier<CreativeModeTab> MAIN_TAB = TABS.register("main", () ->
+                      CreativeModeTab.builder()
+                              .title(Component.translatable("itemGroup.railworks"))
+                              .icon(() -> new ItemStack(BRASS_TRACK_ITEM.get()))
+                              .displayItems((params, out) -> {
+                                  out.accept(BRASS_TRACK_ITEM.get());
+                                  out.accept(BRASS_MINECART_TRACK_ITEM.get());
+                                  // The Brass Bogey has no item of its own; it is made from / drops the Railway Casing
+                                  out.accept(AllBlocks.RAILWAY_CASING.get());
+                              })
+                              .build());
+
+              public static ResourceLocation id(String path) {
+                  return ResourceLocation.fromNamespaceAndPath(MODID, path);
+              }
+
+              public Railworks(IEventBus modBus) {
+                  REGISTRATE.registerEventListeners(modBus);
+                  ITEMS.register(modBus);
+                  TABS.register(modBus);
+                  modBus.addListener(RWNetwork::register);
+                  if (FMLEnvironment.dist == Dist.CLIENT) {
+                      RWClient.init(modBus);
+                  }
+                  // Order matters: track material -> blocks -> block entities -> bogey style
+                  RWTracks.init();
+                  RWBlocks.init();
+                  RWBlockEntities.init();
+                  RWBogeys.init();
+              }
+          }
+          EOF_33
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/RWTracks.java')"
+          cat > 'src/main/java/com/example/railworks/RWTracks.java' <<'EOF_34'
+          package com.example.railworks;
+
+          import com.simibubi.create.content.trains.track.TrackMaterial;
+          import com.simibubi.create.content.trains.track.TrackMaterialFactory;
+          import com.tterrag.registrate.util.nullness.NonNullSupplier;
+
+          import net.minecraft.resources.ResourceLocation;
+
+          /**
+           * The Brass track uses Create's STANDARD track type; the Minecart Gauge track uses the Steam 'n' Rails narrow gauge (see RWGauges). Create only lets a bogey run on track edges
+           * whose type matches the bogey's type. The old private "brass" type made trains think there was no
+           * track (and derail) as soon as they met any other track. With STANDARD, Brass bogeys, Minecart bogeys,
+           * Create bogeys and every other STANDARD track can be mixed freely in one train and on one line.
+           */
+          public class RWTracks {
+              private static final ResourceLocation PARTICLE = ResourceLocation.fromNamespaceAndPath("create",
+                      "block/palettes/stone_types/polished/andesite_cut_polished");
+
+              public static final TrackMaterial BRASS = TrackMaterialFactory.make(Railworks.id("brass"))
+                      .lang("Brass")
+                      .block(NonNullSupplier.lazy(() -> RWBlocks.BRASS_TRACK))
+                      .particle(PARTICLE)
+                      .trackType(TrackMaterial.TrackType.STANDARD)
+                      .standardModels()
+                      .noRecipeGen()
+                      .build();
+
+              public static final TrackMaterial BRASS_MINECART = TrackMaterialFactory.make(Railworks.id("brass_minecart"))
+                      .lang("Brass Minecart Gauge")
+                      .block(NonNullSupplier.lazy(() -> RWBlocks.BRASS_MINECART_TRACK))
+                      .particle(PARTICLE)
+                      .trackType(RWGauges.narrow())
+                      .standardModels()
+                      .noRecipeGen()
+                      .build();
+
+              public static void init() {
+              }
+          }
+          EOF_34
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/BrassTrackBlock.java')"
+          cat > 'src/main/java/com/example/railworks/BrassTrackBlock.java' <<'EOF_35'
+          package com.example.railworks;
+
+          import com.simibubi.create.content.trains.track.TrackBlock;
+          import com.simibubi.create.content.trains.track.TrackMaterial;
+          import com.simibubi.create.content.trains.track.TrackShape;
+
+          import net.minecraft.core.BlockPos;
+          import net.minecraft.core.Direction;
+          import net.minecraft.world.level.BlockGetter;
+          import net.minecraft.world.level.block.Block;
+          import net.minecraft.world.level.block.state.BlockBehaviour;
+          import net.minecraft.world.level.block.state.BlockState;
+          import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
+          import java.util.function.Supplier;
+
+          /** Used for both Railworks tracks; the supplied bogey is what train stations place on this track. */
+          public class BrassTrackBlock extends TrackBlock {
+              private final Supplier<? extends Block> bogey;
+
+              public BrassTrackBlock(BlockBehaviour.Properties properties, TrackMaterial material,
+                                     Supplier<? extends Block> bogey) {
+                  super(properties, material);
+                  this.bogey = bogey;
+              }
+
+              @Override
+              public BlockState getBogeyAnchor(BlockGetter world, BlockPos pos, BlockState state) {
+                  return bogey.get().defaultBlockState()
+                          .setValue(BlockStateProperties.HORIZONTAL_AXIS,
+                                  state.getValue(SHAPE) == TrackShape.XO ? Direction.Axis.X : Direction.Axis.Z);
+              }
+          }
+          EOF_35
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/RWBlocks.java')"
+          cat > 'src/main/java/com/example/railworks/RWBlocks.java' <<'EOF_36'
+          package com.example.railworks;
+
+          import com.simibubi.create.content.trains.track.TrackBlock;
+          import com.simibubi.create.content.trains.track.TrackModel;
+          import com.simibubi.create.foundation.data.CreateRegistrate;
+          import com.simibubi.create.foundation.data.SharedProperties;
+          import com.tterrag.registrate.util.entry.BlockEntry;
+
+          import net.minecraft.client.renderer.RenderType;
+          import net.minecraft.world.level.block.SoundType;
+          import net.minecraft.world.level.material.MapColor;
+
+          public class RWBlocks {
+              public static final BlockEntry<TrackBlock> BRASS_TRACK = Railworks.REGISTRATE
+                      .block("brass_track", p -> (TrackBlock) new BrassTrackBlock(p, RWTracks.BRASS,
+                              () -> RWBlocks.BRASS_BOGEY.get()))
+                      .initialProperties(SharedProperties::stone)
+                      .properties(p -> p.mapColor(MapColor.GOLD)
+                              .strength(0.8F)
+                              .sound(SoundType.METAL)
+                              .noOcclusion()
+                              .forceSolidOn())
+                      .addLayer(() -> RenderType::cutoutMipped)
+                      .clientExtension(() -> () -> new TrackBlock.RenderProperties())
+                      .onRegister(CreateRegistrate.blockModel(() -> TrackModel::new))
+                      .register();
+
+              /** Narrow "minecart gauge" brass track. Straight, sloped and curved pieces are narrow. */
+              public static final BlockEntry<TrackBlock> BRASS_MINECART_TRACK = Railworks.REGISTRATE
+                      .block("brass_minecart_track", p -> (TrackBlock) new BrassTrackBlock(p, RWTracks.BRASS_MINECART,
+                              () -> RWBlocks.BRASS_MINECART_BOGEY.get()))
+                      .initialProperties(SharedProperties::stone)
+                      .properties(p -> p.mapColor(MapColor.GOLD)
+                              .strength(0.8F)
+                              .sound(SoundType.METAL)
+                              .noOcclusion()
+                              .forceSolidOn())
+                      .addLayer(() -> RenderType::cutoutMipped)
+                      .clientExtension(() -> () -> new TrackBlock.RenderProperties())
+                      .onRegister(CreateRegistrate.blockModel(() -> TrackModel::new))
+                      .register();
+
+              public static final BlockEntry<BrassBogeyBlock> BRASS_BOGEY = Railworks.REGISTRATE
+                      .block("brass_bogey", BrassBogeyBlock::new)
+                      .initialProperties(SharedProperties::softMetal)
+                      .properties(p -> p.mapColor(MapColor.GOLD)
+                              .sound(SoundType.NETHERITE_BLOCK)
+                              .noOcclusion())
+                      .register();
+
+              public static final BlockEntry<MinecartBogeyBlock> BRASS_MINECART_BOGEY = Railworks.REGISTRATE
+                      .block("brass_minecart_bogey", MinecartBogeyBlock::new)
+                      .initialProperties(SharedProperties::softMetal)
+                      .properties(p -> p.mapColor(MapColor.GOLD)
+                              .sound(SoundType.NETHERITE_BLOCK)
+                              .noOcclusion())
+                      .register();
+
+              public static void init() {
+              }
+          }
+          EOF_36
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/BrassBogeyBlock.java')"
+          cat > 'src/main/java/com/example/railworks/BrassBogeyBlock.java' <<'EOF_37'
+          package com.example.railworks;
+
+          import com.simibubi.create.AllBlocks;
+          import com.simibubi.create.content.trains.bogey.AbstractBogeyBlock;
+          import com.simibubi.create.content.trains.bogey.BogeySizes;
+          import com.simibubi.create.content.trains.bogey.BogeyStyle;
+          import com.simibubi.create.content.trains.track.TrackMaterial;
+
+          import net.minecraft.core.BlockPos;
+          import net.minecraft.world.entity.player.Player;
+          import net.minecraft.world.item.ItemStack;
+          import net.minecraft.world.level.LevelReader;
+          import net.minecraft.world.level.block.entity.BlockEntityType;
+          import net.minecraft.world.level.block.state.BlockState;
+          import net.minecraft.world.phys.HitResult;
+          import net.minecraft.world.phys.Vec3;
+
+          public class BrassBogeyBlock extends AbstractBogeyBlock<BrassBogeyBlockEntity> {
+              public BrassBogeyBlock(Properties properties) {
+                  super(properties, BogeySizes.SMALL);
+              }
+
+              @Override
+              public TrackMaterial.TrackType getTrackType(BogeyStyle style) {
+                  return TrackMaterial.TrackType.STANDARD;
+              }
+
+              @Override
+              public double getWheelPointSpacing() {
+                  return 2;
+              }
+
+              @Override
+              public double getWheelRadius() {
+                  return 6.5 / 16d;
+              }
+
+              @Override
+              public Vec3 getConnectorAnchorOffset() {
+                  return new Vec3(0, 7 / 32f, 1);
+              }
+
+              @Override
+              public BogeyStyle getDefaultStyle() {
+                  return RWBogeys.BRASS;
+              }
+
+              @Override
+              public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos,
+                                                 Player player) {
+                  return AllBlocks.RAILWAY_CASING.asStack();
+              }
+
+              @Override
+              public Class<BrassBogeyBlockEntity> getBlockEntityClass() {
+                  return BrassBogeyBlockEntity.class;
+              }
+
+              @Override
+              public BlockEntityType<? extends BrassBogeyBlockEntity> getBlockEntityType() {
+                  return RWBlockEntities.BRASS_BOGEY.get();
+              }
+          }
+          EOF_37
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/BrassBogeyBlockEntity.java')"
+          cat > 'src/main/java/com/example/railworks/BrassBogeyBlockEntity.java' <<'EOF_38'
+          package com.example.railworks;
+
+          import com.simibubi.create.content.trains.bogey.AbstractBogeyBlockEntity;
+          import com.simibubi.create.content.trains.bogey.BogeyStyle;
+
+          import net.minecraft.core.BlockPos;
+          import net.minecraft.world.level.block.entity.BlockEntityType;
+          import net.minecraft.world.level.block.state.BlockState;
+
+          public class BrassBogeyBlockEntity extends AbstractBogeyBlockEntity {
+              public BrassBogeyBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+                  super(type, pos, state);
+              }
+
+              @Override
+              public BogeyStyle getDefaultStyle() {
+                  return RWBogeys.BRASS;
+              }
+          }
+          EOF_38
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/RWBlockEntities.java')"
+          cat > 'src/main/java/com/example/railworks/RWBlockEntities.java' <<'EOF_39'
+          package com.example.railworks;
+
+          import com.simibubi.create.content.trains.bogey.BogeyBlockEntityRenderer;
+          import com.simibubi.create.content.trains.bogey.BogeyBlockEntityVisual;
+          import com.tterrag.registrate.util.entry.BlockEntityEntry;
+
+          public class RWBlockEntities {
+              public static final BlockEntityEntry<BrassBogeyBlockEntity> BRASS_BOGEY = Railworks.REGISTRATE
+                      .blockEntity("brass_bogey", BrassBogeyBlockEntity::new)
+                      .visual(() -> BogeyBlockEntityVisual::new, false)
+                      .renderer(() -> BogeyBlockEntityRenderer::new)
+                      .validBlocks(RWBlocks.BRASS_BOGEY)
+                      .register();
+
+              public static final BlockEntityEntry<MinecartBogeyBlockEntity> MINECART_BOGEY = Railworks.REGISTRATE
+                      .blockEntity("brass_minecart_bogey", MinecartBogeyBlockEntity::new)
+                      .visual(() -> BogeyBlockEntityVisual::new, false)
+                      .renderer(() -> BogeyBlockEntityRenderer::new)
+                      .validBlocks(RWBlocks.BRASS_MINECART_BOGEY)
+                      .register();
+
+              public static void init() {
+              }
+          }
+          EOF_39
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/RWBogeys.java')"
+          cat > 'src/main/java/com/example/railworks/RWBogeys.java' <<'EOF_40'
+          package com.example.railworks;
+
+          import com.simibubi.create.content.trains.bogey.BogeySizes;
+          import com.simibubi.create.content.trains.bogey.BogeyStyle;
+
+          import net.minecraft.network.chat.Component;
+          import net.minecraft.resources.ResourceLocation;
+
+          public class RWBogeys {
+              /** Own cycle group: wrench-cycling swaps Brass and Minecart bogeys, never standard ones. */
+              public static final ResourceLocation BRASS_CYCLE_GROUP = Railworks.id("brass");
+
+              /** How much narrower than a normal bogey the minecart gauge bogey is (1.0 = full width). */
+              public static final float MINECART_WIDTH = 0.6f;
+
+              public static final BogeyStyle BRASS = new BogeyStyle.Builder(Railworks.id("brass"), BRASS_CYCLE_GROUP)
+                      .displayName(Component.translatable("railworks.bogey.style.brass"))
+                      .size(BogeySizes.SMALL, RWBlocks.BRASS_BOGEY, () -> () -> {
+                          RWPartialModels.init();
+                          return new BogeyStyle.SizeRenderer(new BrassBogeyRenderer(), BrassBogeyVisual::new);
+                      })
+                      .build();
+
+              public static final BogeyStyle BRASS_MINECART =
+                      new BogeyStyle.Builder(Railworks.id("brass_minecart"), BRASS_CYCLE_GROUP)
+                              .displayName(Component.translatable("railworks.bogey.style.brass_minecart"))
+                              .size(BogeySizes.SMALL, RWBlocks.BRASS_MINECART_BOGEY, () -> () -> {
+                                  RWPartialModels.init();
+                                  return new BogeyStyle.SizeRenderer(new BrassBogeyRenderer(MINECART_WIDTH),
+                                          (ctx, partialTick, inContraption) ->
+                                                  new BrassBogeyVisual(ctx, partialTick, inContraption, MINECART_WIDTH));
+                              })
+                              .build();
+
+              public static void init() {
+              }
+          }
+          EOF_40
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/RWPartialModels.java')"
+          cat > 'src/main/java/com/example/railworks/RWPartialModels.java' <<'EOF_41'
+          package com.example.railworks;
+
+          import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+
+          public class RWPartialModels {
+              public static final PartialModel
+                      BOGEY_FRAME = PartialModel.of(Railworks.id("block/bogey/frame")),
+                      BOGEY_WHEELS = PartialModel.of(Railworks.id("block/bogey/wheel"));
+
+              public static void init() {
+              }
+          }
+          EOF_41
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/SwitchBogeyPayload.java')"
+          cat > 'src/main/java/com/example/railworks/SwitchBogeyPayload.java' <<'EOF_NEW1'
+          package com.example.railworks;
+
+          import net.minecraft.core.BlockPos;
+          import net.minecraft.network.RegistryFriendlyByteBuf;
+          import net.minecraft.network.codec.StreamCodec;
+          import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+
+          /** Sent by the client when the player presses the switch key while looking at a bogey. */
+          public record SwitchBogeyPayload(BlockPos pos) implements CustomPacketPayload {
+              public static final CustomPacketPayload.Type<SwitchBogeyPayload> TYPE =
+                      new CustomPacketPayload.Type<>(Railworks.id("switch_bogey"));
+
+              public static final StreamCodec<RegistryFriendlyByteBuf, SwitchBogeyPayload> CODEC =
+                      StreamCodec.composite(BlockPos.STREAM_CODEC, SwitchBogeyPayload::pos, SwitchBogeyPayload::new);
+
+              @Override
+              public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+                  return TYPE;
+              }
+          }
+          EOF_NEW1
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/RWNetwork.java')"
+          cat > 'src/main/java/com/example/railworks/RWNetwork.java' <<'EOF_NEW2'
+          package com.example.railworks;
+
+          import com.simibubi.create.AllBlocks;
+          import com.simibubi.create.content.trains.bogey.AbstractBogeyBlock;
+
+          import net.minecraft.core.BlockPos;
+          import net.minecraft.core.registries.BuiltInRegistries;
+          import net.minecraft.network.chat.Component;
+          import net.minecraft.server.level.ServerPlayer;
+          import net.minecraft.sounds.SoundEvents;
+          import net.minecraft.sounds.SoundSource;
+          import net.minecraft.world.level.Level;
+          import net.minecraft.world.level.block.Block;
+          import net.minecraft.world.level.block.state.BlockState;
+          import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+          import net.minecraft.world.phys.Vec3;
+          import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+          import net.neoforged.neoforge.network.handling.IPayloadContext;
+          import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+
+          import java.util.ArrayList;
+          import java.util.Comparator;
+          import java.util.List;
+
+          public class RWNetwork {
+              public static void register(RegisterPayloadHandlersEvent event) {
+                  PayloadRegistrar registrar = event.registrar("1");
+                  registrar.playToServer(SwitchBogeyPayload.TYPE, SwitchBogeyPayload.CODEC, RWNetwork::handleSwitch);
+              }
+
+              /**
+               * Switches the bogey the player is looking at to the next bogey type of the same size.
+               * Works with every bogey block registered by any mod (Create, Railworks, Steam 'n' Rails,
+               * Blocks 'n Bogies, ...), so with only Create + Railworks it simply toggles Normal <-> Brass. Only bogeys of the same gauge are offered.
+               */
+              private static void handleSwitch(SwitchBogeyPayload payload, IPayloadContext ctx) {
+                  ctx.enqueueWork(() -> {
+                      if (!(ctx.player() instanceof ServerPlayer player)) return;
+                      Level level = player.level();
+                      BlockPos pos = payload.pos();
+
+                      if (!player.getMainHandItem().is(AllBlocks.RAILWAY_CASING.asItem())) return;
+                      if (player.distanceToSqr(Vec3.atCenterOf(pos)) > 64.0) return;
+                      if (!level.hasChunkAt(pos)) return;
+                      if (!level.mayInteract(player, pos)) return;
+
+                      BlockState state = level.getBlockState(pos);
+                      if (!(state.getBlock() instanceof AbstractBogeyBlock<?> current)) {
+                          player.displayClientMessage(Component.translatable("railworks.switch.not_bogey"), true);
+                          return;
+                      }
+
+                      List<AbstractBogeyBlock<?>> options = new ArrayList<>();
+                      for (Block block : BuiltInRegistries.BLOCK) {
+                          if (block instanceof AbstractBogeyBlock<?> other && other.getSize() == current.getSize()
+                                  && sameGauge(current, other)) {
+                              options.add(other);
+                          }
+                      }
+                      options.sort(Comparator.comparing(
+                              (AbstractBogeyBlock<?> b) -> BuiltInRegistries.BLOCK.getKey(b).toString()));
+
+                      if (options.size() < 2) {
+                          player.displayClientMessage(Component.translatable("railworks.switch.only_one"), true);
+                          return;
+                      }
+
+                      AbstractBogeyBlock<?> target = options.get((options.indexOf(current) + 1) % options.size());
+                      BlockState next = target.defaultBlockState();
+                      if (state.hasProperty(BlockStateProperties.HORIZONTAL_AXIS)
+                              && next.hasProperty(BlockStateProperties.HORIZONTAL_AXIS)) {
+                          next = next.setValue(BlockStateProperties.HORIZONTAL_AXIS,
+                                  state.getValue(BlockStateProperties.HORIZONTAL_AXIS));
+                      }
+                      if (state.hasProperty(BlockStateProperties.WATERLOGGED)
+                              && next.hasProperty(BlockStateProperties.WATERLOGGED)) {
+                          next = next.setValue(BlockStateProperties.WATERLOGGED,
+                                  state.getValue(BlockStateProperties.WATERLOGGED));
+                      }
+
+                      level.setBlockAndUpdate(pos, next);
+                      level.playSound(null, pos, SoundEvents.NETHERITE_BLOCK_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                      player.displayClientMessage(Component.translatable("railworks.switch.done", target.getName()), true);
+                  });
+              }
+
+              /** Only offer bogeys of the same gauge, otherwise the train would sit on track it cannot ride. */
+              private static boolean sameGauge(AbstractBogeyBlock<?> a, AbstractBogeyBlock<?> b) {
+                  try {
+                      return a.getTrackType(a.getDefaultStyle()).equals(b.getTrackType(b.getDefaultStyle()));
+                  } catch (RuntimeException e) {
+                      return true;
+                  }
+              }
+          }
+          EOF_NEW2
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/RWClient.java')"
+          cat > 'src/main/java/com/example/railworks/RWClient.java' <<'EOF_NEW3'
+          package com.example.railworks;
+
+          import com.mojang.blaze3d.platform.InputConstants;
+          import com.simibubi.create.AllBlocks;
+
+          import net.createmod.ponder.foundation.PonderIndex;
+          import net.minecraft.client.KeyMapping;
+          import net.minecraft.client.Minecraft;
+          import net.minecraft.world.phys.BlockHitResult;
+          import net.minecraft.world.phys.HitResult;
+          import net.neoforged.bus.api.IEventBus;
+          import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+          import net.neoforged.neoforge.client.event.ClientTickEvent;
+          import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+          import net.neoforged.neoforge.common.NeoForge;
+          import net.neoforged.neoforge.network.PacketDistributor;
+
+          /** Client only: the "switch bogey" key (Left Alt by default, can be changed in Controls) and Ponder. */
+          public class RWClient {
+              public static final KeyMapping SWITCH_BOGEY = new KeyMapping("key.railworks.switch_bogey",
+                      InputConstants.Type.KEYSYM, InputConstants.KEY_LALT, "key.categories.railworks");
+
+              public static void init(IEventBus modBus) {
+                  modBus.addListener(RWClient::registerKeys);
+                  modBus.addListener(RWClient::onClientSetup);
+                  NeoForge.EVENT_BUS.addListener(RWClient::onClientTick);
+              }
+
+              private static void registerKeys(RegisterKeyMappingsEvent event) {
+                  event.register(SWITCH_BOGEY);
+              }
+
+              private static void onClientSetup(FMLClientSetupEvent event) {
+                  event.enqueueWork(() -> PonderIndex.addPlugin(new RWPonderPlugin()));
+              }
+
+              private static void onClientTick(ClientTickEvent.Post event) {
+                  Minecraft mc = Minecraft.getInstance();
+                  boolean usable = mc.player != null && mc.level != null && mc.screen == null;
+                  while (SWITCH_BOGEY.consumeClick()) {
+                      if (!usable) continue;
+                      if (!mc.player.getMainHandItem().is(AllBlocks.RAILWAY_CASING.asItem())) continue;
+                      if (mc.hitResult instanceof BlockHitResult hit && hit.getType() == HitResult.Type.BLOCK) {
+                          PacketDistributor.sendToServer(new SwitchBogeyPayload(hit.getBlockPos()));
+                      }
+                  }
+              }
+          }
+          EOF_NEW3
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/BrassBogeyRenderer.java')"
+          cat > 'src/main/java/com/example/railworks/BrassBogeyRenderer.java' <<'EOF_42'
+          package com.example.railworks;
+
+          import com.mojang.blaze3d.vertex.PoseStack;
+          import com.mojang.blaze3d.vertex.VertexConsumer;
+          import com.simibubi.create.AllBlocks;
+          import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
+          import com.simibubi.create.content.trains.bogey.BogeyRenderer;
+
+          import net.createmod.catnip.data.Iterate;
+          import net.createmod.catnip.render.CachedBuffers;
+          import net.createmod.catnip.render.SuperByteBuffer;
+          import net.minecraft.client.renderer.MultiBufferSource;
+          import net.minecraft.client.renderer.RenderType;
+          import net.minecraft.core.Direction;
+          import net.minecraft.nbt.CompoundTag;
+          import net.minecraft.world.level.block.Blocks;
+
+          public class BrassBogeyRenderer implements BogeyRenderer {
+              /** 1.0 = normal width. Smaller values give the narrow minecart gauge bogey. */
+              private final float width;
+
+              public BrassBogeyRenderer() {
+                  this(1f);
+              }
+
+              public BrassBogeyRenderer(float width) {
+                  this.width = width;
+              }
+              @Override
+              public void render(CompoundTag bogeyData, float wheelAngle, float partialTick, PoseStack poseStack,
+                                 MultiBufferSource bufferSource, int light, int overlay, boolean inContraption) {
+                  VertexConsumer buffer = bufferSource.getBuffer(RenderType.cutoutMipped());
+
+                  SuperByteBuffer shaft = CachedBuffers.block(AllBlocks.SHAFT.getDefaultState()
+                          .setValue(ShaftBlock.AXIS, Direction.Axis.Z));
+                  for (int i : Iterate.zeroAndOne) {
+                      shaft.translate(-.5f, .25f, i * -1)
+                              .center()
+                              .rotateZDegrees(wheelAngle)
+                              .uncenter()
+                              .light(light)
+                              .overlay(overlay)
+                              .renderInto(poseStack, buffer);
+                  }
+
+                  CachedBuffers.partial(RWPartialModels.BOGEY_FRAME, Blocks.AIR.defaultBlockState())
+                          .scale((1 - 1 / 512f) * width, 1 - 1 / 512f, 1 - 1 / 512f)
+                          .light(light)
+                          .overlay(overlay)
+                          .renderInto(poseStack, buffer);
+
+                  SuperByteBuffer wheels = CachedBuffers.partial(RWPartialModels.BOGEY_WHEELS, Blocks.AIR.defaultBlockState());
+                  for (int side : Iterate.positiveAndNegative) {
+                      wheels.translate(0, 12 / 16f, side)
+                              .rotateXDegrees(wheelAngle)
+                              .scale(width, 1, 1)
+                              .light(light)
+                              .overlay(overlay)
+                              .renderInto(poseStack, buffer);
+                  }
+              }
+          }
+          EOF_42
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/BrassBogeyVisual.java')"
+          cat > 'src/main/java/com/example/railworks/BrassBogeyVisual.java' <<'EOF_43'
+          package com.example.railworks;
+
+          import java.util.function.Consumer;
+
+          import org.jetbrains.annotations.Nullable;
+
+          import com.mojang.blaze3d.vertex.PoseStack;
+          import com.simibubi.create.AllPartialModels;
+          import com.simibubi.create.content.trains.bogey.BogeyVisual;
+          import com.simibubi.create.foundation.render.SpecialModels;
+
+          import dev.engine_room.flywheel.api.instance.Instance;
+          import dev.engine_room.flywheel.api.visualization.VisualizationContext;
+          import dev.engine_room.flywheel.lib.instance.InstanceTypes;
+          import dev.engine_room.flywheel.lib.instance.TransformedInstance;
+          import dev.engine_room.flywheel.lib.model.Models;
+          import net.minecraft.core.Direction;
+          import net.minecraft.nbt.CompoundTag;
+
+          public class BrassBogeyVisual implements BogeyVisual {
+              private final TransformedInstance shaft1;
+              private final TransformedInstance shaft2;
+              private final TransformedInstance frame;
+              private final TransformedInstance wheel1;
+              private final TransformedInstance wheel2;
+
+              private final float width;
+
+              public BrassBogeyVisual(VisualizationContext ctx, float partialTick, boolean inContraption) {
+                  this(ctx, partialTick, inContraption, 1f);
+              }
+
+              public BrassBogeyVisual(VisualizationContext ctx, float partialTick, boolean inContraption, float width) {
+                  this.width = width;
+                  var shaftInstancer = ctx.instancerProvider()
+                          .instancer(InstanceTypes.TRANSFORMED, Models.partial(AllPartialModels.SHAFT));
+                  shaft1 = shaftInstancer.createInstance();
+                  shaft2 = shaftInstancer.createInstance();
+
+                  var wheelInstancer = ctx.instancerProvider()
+                          .instancer(InstanceTypes.TRANSFORMED, SpecialModels.smoothLit(RWPartialModels.BOGEY_WHEELS));
+                  frame = ctx.instancerProvider()
+                          .instancer(InstanceTypes.TRANSFORMED, SpecialModels.smoothLit(RWPartialModels.BOGEY_FRAME))
+                          .createInstance();
+                  wheel1 = wheelInstancer.createInstance();
+                  wheel2 = wheelInstancer.createInstance();
+              }
+
+              @Override
+              public void update(CompoundTag bogeyData, float wheelAngle, PoseStack poseStack) {
+                  shaft1.setTransform(poseStack)
+                          .translate(-.5f, .25f, 0)
+                          .center()
+                          .rotateTo(Direction.UP, Direction.SOUTH)
+                          .rotateYDegrees(wheelAngle)
+                          .uncenter()
+                          .setChanged();
+                  shaft2.setTransform(poseStack)
+                          .translate(-.5f, .25f, -1)
+                          .center()
+                          .rotateTo(Direction.UP, Direction.SOUTH)
+                          .rotateYDegrees(wheelAngle)
+                          .uncenter()
+                          .setChanged();
+                  wheel1.setTransform(poseStack)
+                          .translate(0, 12 / 16f, -1)
+                          .rotateXDegrees(wheelAngle)
+                          .scale(width, 1, 1)
+                          .setChanged();
+                  wheel2.setTransform(poseStack)
+                          .translate(0, 12 / 16f, 1)
+                          .rotateXDegrees(wheelAngle)
+                          .scale(width, 1, 1)
+                          .setChanged();
+                  frame.setTransform(poseStack)
+                          .scale((1 - 1 / 512f) * width, 1 - 1 / 512f, 1 - 1 / 512f)
+                          .setChanged();
+              }
+
+              @Override
+              public void hide() {
+                  shaft1.setZeroTransform().setChanged();
+                  shaft2.setZeroTransform().setChanged();
+                  frame.setZeroTransform().setChanged();
+                  wheel1.setZeroTransform().setChanged();
+                  wheel2.setZeroTransform().setChanged();
+              }
+
+              @Override
+              public void updateLight(int packedLight) {
+                  shaft1.light(packedLight).setChanged();
+                  shaft2.light(packedLight).setChanged();
+                  frame.light(packedLight).setChanged();
+                  wheel1.light(packedLight).setChanged();
+                  wheel2.light(packedLight).setChanged();
+              }
+
+              @Override
+              public void collectCrumblingInstances(Consumer<@Nullable Instance> consumer) {
+                  consumer.accept(shaft1);
+                  consumer.accept(shaft2);
+                  consumer.accept(frame);
+                  consumer.accept(wheel1);
+                  consumer.accept(wheel2);
+              }
+
+              @Override
+              public void delete() {
+                  shaft1.delete();
+                  shaft2.delete();
+                  frame.delete();
+                  wheel1.delete();
+                  wheel2.delete();
+              }
+          }
+          EOF_43
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/textures/block/brass_track.png')"
+          base64 -d > 'src/main/resources/assets/railworks/textures/block/brass_track.png' <<'EOF_44'
+          iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADXklEQVR42tVXPWzTQBT+nFx8TlKcKkkjtU0rFjKwQCUEKwuoGwsD
+          CwsSM2xIDFRiYmBhrgQSEmwMCAQTS4VYqNQfJFTSIFKS/qVxWie1YztuzZD4ajt2GhBV4Fvse/fe3ffe++4sc/PPrlvp4ShsVPea
+          sMeK1oIka6jVdaiaidxEAuUdBfmfe/AiNzmM82fSqO41kS/JyE0k2Dora7uYvvuWgw+IqptYWdsFAKQTAvIlGfmSDABIihS1us6c
+          8yUZ7z6tQeDDyE0OM/tyQXKRauomqrKG8o4CgQ9jfUdBEEKrJZltki/JaOommrqJpEhdgUmRIilSbNdUjKXjrkVsm8CHIfBhZpdk
+          jREKAtdPC1Y7FfEu7ERMIEiKAtuwXNlHKiEw/5nZz/4tcA4UrQVVN7G4WoWqmchm4qjVdaQSgksDqYTQpYNsZgjZkTir5PdyHQ21
+          hUqtiefvv3FBFSBLBQlRSli/7XKNj8SxWpIRpYS1oNrJXJI1ZDNDrhhVM5EvyUiKFOXKPjYlBcWtBmgkhF4g4x3W3s0BIEoJchMJ
+          trG9uV/MUZ8pAGA0FQflw9CNg94ElgsS6yEAqJrJMkolBCwVpK6e2+OYQKBqpiu+UG4LubjVwKlYBA211ZuAHWhvbj9jAmFEvJt5
+          /Z1is9ebW9jg0AdIlJJADazvKEzZSbFdWs04gCRrXTFRSpguvEQHooG+CZyUBvoFd/vaWUs3DkA7N5itWuq40Zx2J5wqPy5+9vVX
+          /4toNBVrZ+7DOta5A5xzto0J8Tey9SWwkK8CAA4tC0bLnaXAk2PnbPj59EVAM0zorcPuGctiD8M89J3zjfP4/PPgrlzMdlHlI2GE
+          OLdmNMMM9Ok19+ZjseeFRE6PirAsC0annJQPu8Z8JNR5p10n4KjawfHHaqCfY+T3UbGPbr/HMJBAcasRKKJ2Nv4ipHz4/xehtXnf
+          Ig9uXbBO8iJ6/GIxWIQVBaS42RhYBepVBZy1dOeoWZk4Y9Zlc9ozcX8f53xnzJ17EliBLy9vWOTD3A/UFQNinG+z8rwDYOOuDALi
+          /MZ+2JZUkIdP5/tWvVPgzMcTRyMh/zV8UK7sg1yeGjvRr+HcwkbgnPOvayC4d3PKCg2SgCRr+CsEXj2anvmTuN3GgFtw9dKE9QvQ
+          5mv9y+LYIgAAAABJRU5ErkJggg==
+          EOF_44
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/textures/block/brass_track_mip.png')"
+          base64 -d > 'src/main/resources/assets/railworks/textures/block/brass_track_mip.png' <<'EOF_45'
+          iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABKklEQVR42u1UQUrEMBR9taWNCp1SuxDBEUGLOwX3nmEWXsB7eBdv
+          4REEwZUgSMbNGAWHaWsz0CZx4uhmGihTcdlN3i6Pz/vv/0+ec3117qBHbKBn9G7AG10cLpNo0xBZKdC8K7lAziWKuUItNdL9Ad5m
+          FehruSaUDiOcHSfISgHKOOIwwPusglAaOZdY6GXnsF6tNJ4nnwCAZEBAGQdlHAAQhwGKuTLFlHHc3k1AfBfpMDL840veMiWUxsnB
+          bqvRR153n2DMuGlCGYdQGkJpM0GDOAwQhwGmRY29ZLsl0nDEd0F81/Dy67ul0QXn4eby578TjFcbaZBzuSa0RTzEITEbOD3aQbaq
+          u3+a/nkCx35DmwM2B2wO2BywOWBzwOaAzQFrwBqwBvo28AtYvof/baQcfwAAAABJRU5ErkJggg==
+          EOF_45
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/textures/block/brass_track_crossing.png')"
+          base64 -d > 'src/main/resources/assets/railworks/textures/block/brass_track_crossing.png' <<'EOF_46'
+          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
+          i9vxXyqzZdeBcLwtAAAAAElFTkSuQmCC
+          EOF_46
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/textures/item/brass_track.png')"
+          base64 -d > 'src/main/resources/assets/railworks/textures/item/brass_track.png' <<'EOF_47'
+          iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABmklEQVR42s2SMUgbYRiGn2goqEho6UUsRJREjiOTIVCEOJgWQoaA
+          BeMaSEBHyViLIC2NOBTj6BBBAl2ytUOWNl0CoTRc6eJ5cEHMSaB3Il7R+XdoLyS0VifxXd/v/Xj+9/vh3iubUkQ2pYjrfO9tluzk
+          YwAiOTuBqtts7qse1xu4KdyxL9gqq5RezVNttFleCPMyE+kSeXpRAfY+ah6ASiEhAFTd5rtuE1X8vFl5Su7tF3pJvNehRhV/H0lT
+          s1jf/cpOPsbqdp31bBRADLoDY4+GNo46vyjmY7x7/4PMizCfGm1U3SYiSwCohzYn1iXa0Rmd00sABiuFhFh6FtpwB/Tjc4r5GLnX
+          n5kO+EjNTfFEGkH8efW3g58AjD8ewTCd3yUuJmWWF8LMyFIfarXRZnLyIU3NQtVtAGZkidHhBximQ6XW8nhdoxe1qVlslVU69gVr
+          xXq3B8N0AKjUWt3yvYbpYJgOS89DLCZlooqfpmZR+nDw32DfGdPxoAgFfERkqYt6U/Cvf5COBwVAKOC7VfCfSseDwl10Z7oCw/+x
+          n0wL18wAAAAASUVORK5CYII=
+          EOF_47
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/textures/block/bogey/frame.png')"
+          base64 -d > 'src/main/resources/assets/railworks/textures/block/bogey/frame.png' <<'EOF_48'
+          iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEMUlEQVR42rWWzW8bVRTFf+NMnDiepHac4CZuUsmB1IuIhKoSIgiq
+          iA2REBKLoqqLoCLBpizoAnWVVRcof0N3ldoVYoEiwQqJRkTqpkqyslwcUduhNont2jPjsceEYTGe8fhr7AA50kgzfu/d93zfPedc
+          4fb6khEO+lmcCzIIEukiuaIKQDjo7zGnAMAFacQ1VkmpIb735iVi8yEAVhamAfCFJ0AaBaUKgJYrA7CXPCY2HyKeygNwcy1mzm3M
+          2Use28EfbO9z+McrojMBACYnRgEolM2Yhy9fEZ0NIFyZCxoAfp93oAyomt7y3b7OGl9dioABR3mF+Is8RycKAJEpidjlEJGQBAKI
+          Fyf9SD4vks/L+Jj7IeSKjqKZD2Cvc8I5bgDxF3lSf8r2uPU+G5IQAI845OHujWsomo5ccX8UTefujWuIQx5krW5v1v7IWh2A0MSo
+          /c+dODpRCDWuxFNUatx/uMuguP9wl6JS4/+Ch3NEoVwlMiV1/B6Zksg3ilHknBG7HLLT7ixCoTF+rgc4fGnSMBKSetLQE5RG2NxY
+          HTjo5sYqwT4CY4lMdDYAAiBAQa5SkKv2d3Q2QEmpIVxfvmScBw1/2c8IVxfDxrhvuOscWavzLJETxGxBBdR/KURqTyEC+OqTt4jN
+          h1hZmMa38BooVVsx46k8n2/9hHjv1ttnkmJgIClevfOI7d0kOweZDs/IFVVKDSoL52VG3+88F67MBY1emVU1nU/XYu4s0Oun/J4t
+          2ydudzfrIO24II1we33JsNaEg34+fvd14qk8sfkQq3ceCZsb7xhyRW+6YUv629IeT+XZOcjwxUfL9jy3q7LWPdjet79XFqb54dff
+          uLkWMwuxoqNodcStx09xc8MWdwPW733XUv3jY17kit7Bgm+/vN4SxxeeYHEuaP9BRasjV3R3N2ynXTfHyxYGF6ZEutiMUTXNTLSc
+          qxva3e2/QMuVWZwL2tdkxfYAvL8813Ohc8yi3yDoNteZgUq1jqzVTRY82U93qJWFJ/vplgCffbhkmkxDO3pt7NzMgpPqckVH1fTB
+          zaik1CgpNbvh3N5NDrTOou5e8phEumiLlVqtE//xa1r0upeuy1q9oxd0Qz9ZVzWd+M/fwFHxbHZ8cdLv2uVmC6Y3vBEJMj7mRfIN
+          ozQKuINRSpVsXj3bAaIzgZ5dbnQmgGlspjY8z3Tnp+TzImt1tFyZzLF8tgP063Kbmwz3jbWXPKZQ1s5Gw0G6XEvlTJFqeoX1btVZ
+          PGVm0dNONTcaDgpLmp3F2F6YiXSRolxFdDLArSNSNd3ucp1X0N7lOjEyPNT13XJS/a9T+nZE7fTr1+Va9AXwis2u33q3xkpKDcOg
+          2RH1s+Otx0/7drnOA1h37dQWJw1PShqnfxuIOwcZEuliT513dkDZgtpSWG4ZaxqY2nXOs0RO+ODqvPEPh8XF5ajNRKYAAAAASUVO
+          RK5CYII=
+          EOF_48
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/textures/block/bogey/frame2.png')"
+          base64 -d > 'src/main/resources/assets/railworks/textures/block/bogey/frame2.png' <<'EOF_49'
+          iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAE6ElEQVR42q1XT2gcVRj/bTKz2cnsrma2MbtuQ8HUJJCDiVFKYqH0
+          FkXFgmirUvDiQUutKEQRe1BEDx5UmouHiqJUTxEpGoJQtNogBBPFwGZtSprNkKSb2ZGdmX3bNzsZD7PzdnZ3srup+WDZN2/en+/9
+          vt/3+94Ejj1w0P7gpWMYf+VreO3a1PN48cMfIApBtGIGoXV9u811xy5n1AA3NpTEcF933aDhvm6IQhAJSQQAhMuLJWIiIp1OWytQ
+          bCgGAEAnFDqhGBtKYm5JZuP9TYROKJYzKrj+3q6mp9MJRU4rQoqEsKEAG4qBV58eBQCk1hRcmF5gY/t7uzA7vwqNmHXrRASetd33
+          nDu5MHMOQk8UAEC28vjmSoptDgBBrg0AkMsTSFEBw33dOPXeZYwOxEFNC7FoCBoxmTO/fnoKiytZAMDYeB/IVh6LK1m89dnPVU5x
+          BqG4ML2AL2b+9o1VROBBSzu4bVroighV7yefO4LUmgKzZNWd+N0v51g7taYgnVExfTWNeDmkzAFRCCIi8Ahy7c5JeeefmhakqMBO
+          H+TaYJYsUNNCWOIdtFayyOWL4Ll2RAS+yonzp8fqEHjykcP1CHgfvJt7YXcRCAtBhDoqU+JdnZCioToEEpKIo2cvVRb+5Kc6Dvg6
+          QE0LQb4dQb4d1LRASzvs9K4zeeM2Ojt4kK08NtWCLwIbOYNtVpsNek26trWKgEZM8Fw7W9AlLABfDrRqe0LALFnQCUVcEkG28iwE
+          fhxw296+piFohQNhIQidmBB6otgsk9APgT2loeMdQEtW1cvNnIG4JFZxgJoWIAAIhxoisKc0PHNiBCePD9YJkVfhaGmnCiXoRbw2
+          dQWjA3FfBFpNw8DFyQn75PFBdE58XPWiMHMOR89eQkJydNsln/vvSvH3v13H7PwqQ+DMiZEqxxtJ8R/prQCXzqhNmerG3luMfvz9
+          BitG9ye7WHqlMyoiAt+kGDn2YH+Pzc0tyQwqry2uZGEQio0cE2YAwD+y2rDETl9Ns/GtlOPAQG+XPT6UBABI0VC54BSdO8GSjEeP
+          3MdKbiIm4pe/1hmUGjFhEIrP33xs1/uEa8sZNeCrA+NDSciKjtRNBfK2DgBIHghj8FAM40NJRDqdtAOASKdTNzZzjkNxSfS9iHgv
+          JAlJxHV59zBzNoDUTQVrtzTW6bbvjYWxoRjQCrRhLFNryq59iVi4sQOxaIid3Gvyto5YNIT1rF6l3xoxWS67qZfOqLg4OVE1vxVy
+          1ymhn73x7MM42B0BAKxnHWS8zy+8fxmz86se8lXgjwh8U/S4XL6I5IFwVQhcHij5Iqa+W6gjZ+2zoxX8norQ6888ZH90/gkHgcFD
+          MQa7l4QBAC8/NdIQgbkluel9stbeOT1my9s6sK2Du7YkY3woiWQs7JuGts+Ja5/3alqBolA0sakY4Mr5acclEX/eMJlkbuYMLGfU
+          wFdvP243Q8Ar1a0goBMTJWsH61mtQkLvAk7byfVWOODogrEnBIrUwpZqOA6IrM5T5kBZRu27wx2QszpTwva2iqDFoqFdFa4ZL0xr
+          B/K2XrmSuV87fm3vbz/MPaiqFZvrQK0S3iX+fyc0YsLasXHr30LFAe8mtW0vkfbDAYNQBMoc4twO7yY6oW6RCXxb/kTbT1vOqIHh
+          w/fYVSHQCb3jq/Wd8kAnFP8B96Hxrru1qg0AAAAASUVORK5CYII=
+          EOF_49
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/textures/block/bogey/wheel.png')"
+          base64 -d > 'src/main/resources/assets/railworks/textures/block/bogey/wheel.png' <<'EOF_50'
+          iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAENUlEQVR42q2XT2wbRRTGf66cJetdo6zjJI6cHFqUlEO4UFUqJ+CC
+          oC0nkDghwa1wBYlWlThyAXFEcMqhXIpEK1WqkJAqJKJCBSEqTQ6JkzQ0sVW7drxtvet1bMfmYGbYf07WhO+0O2923ve+eW/mbQzo
+          4sO5MyeIgpt37oeO//71u0yNJcmMapDWYSQBj+s9Y8WiuGuTL9c4feEK8TDnltOMRODcmROhJG4tPcBIDpNN60wYGlNjSfLlGgAl
+          06ZQsTBrDQAvAb/zmtPC9pHRVIWkOgSA5TT7khAOAKbGkqHOPQTczt2O5y+elZNv3N7g+kIO22lKImEk5o6n5fOEofW2woVsWpfP
+          MaDrdw5gO03mL55ldXvX83Fux+T6Qg5NVQCkGrqqSBIPv/8Q4MAcAJh86yvi7oQTzoXUAu+/8QKLq0WWt8oBW81pBZT4/OpvAIyP
+          JGQuAFL+R4KM2AIRvZDd7QBgcbXIraUHjBsJz7iYL1SQ1fHrZmjOhOVUPCx6sccCy1vlvs7dKsh8euk5+Tw+kmDueDo0+rWdxWAZ
+          hjkYxAbw5XeLnJw2pAIL9/K93Kja8tu1HTNYhn7po+RAFOhyvh2wHYuygMiBQbC2Y3pK1XKaJNUhNFWR0QcU8Et74/YGs9OGJwdK
+          ph16OIVhJmsElMgAS7lSkEBSHfIsrKkKPy7+Rcm0mTA06fzPzTKaqnjm+qtgEEgCmZQuy8Qd0S8rBfnutgkSmqqQSekUq1Zg8as/
+          rfLOq88HxkIJFKsWM1mDZEJBV4dIJg5OtFq9ieW0qNWboc6jInAU/1e4j2I/hAr+6KUCN+/clz2AKJkoCrhP0X7OIykwaCNyUGPy
+          zUevkU3rFCoWL85MyF7g9IUrsbBvj0XpcAbpirJpnVOzGek8M6rJfuBQBf6PluzktCEr5NvL5w9VIJZN6x4CyYRCYniIpVwpFlWF
+          916fCwTx9suznJrNyJ6guFbij1wRgPOXrsm14/5kezbxDInhOEfFylaFla2Kpzta2aoA0F3/rPvx5Wt88embHN1TH8z/sBw4psXp
+          +ckHr2Bae1CxiItycqPd6RyZQCaloasKuqowOarxcNeWl5JTekq90aK4axOfmTKoN9q0Ox3qjd7JtrpdjR2VQLFqAzaaqrBeMD0K
+          3N0s097vkC/XiIuLxofuIM6cvXZfBbzQsJwmq9u7NJr7lEybeLFqyXZM3GrFqn1oL+e296LtOXUfzRsF0zMm1s3tmDTb+xQqVi8J
+          /dep+yNhP+jKdc8XweiqElgnk9KoOS1Kpi1/XuJ6xPZKJBMgEyrMJrCeN/uu9cTao95o8ehxnbi7UXTf+2Hvxarmkfxfu8ndDW/J
+          Taa0vgQqTxycvTbVp41oPeHRKiH4/vO9fGy/0+1tQY+pFshW//vBW2AwkUpwLBb754pusZ6voqlK378tcSb8DbefYY/naLk2AAAA
+          AElFTkSuQmCC
+          EOF_50
+          mkdir -p "$(dirname 'src/main/resources/logo.png')"
+          base64 -d > 'src/main/resources/logo.png' <<'EOF_51'
+          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
+          EOF_51
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/MinecartBogeyBlock.java')"
+          cat > 'src/main/java/com/example/railworks/MinecartBogeyBlock.java' <<'EOF_N101'
+          package com.example.railworks;
+
+          import com.simibubi.create.AllBlocks;
+          import com.simibubi.create.content.trains.bogey.AbstractBogeyBlock;
+          import com.simibubi.create.content.trains.bogey.BogeySizes;
+          import com.simibubi.create.content.trains.bogey.BogeyStyle;
+          import com.simibubi.create.content.trains.track.TrackMaterial;
+
+          import net.minecraft.core.BlockPos;
+          import net.minecraft.world.entity.player.Player;
+          import net.minecraft.world.item.ItemStack;
+          import net.minecraft.world.level.LevelReader;
+          import net.minecraft.world.level.block.entity.BlockEntityType;
+          import net.minecraft.world.level.block.state.BlockState;
+          import net.minecraft.world.phys.HitResult;
+          import net.minecraft.world.phys.Vec3;
+
+          /** The narrow "minecart gauge" brass bogey. Runs on the Steam 'n' Rails narrow gauge, like the Minecart Gauge track. */
+          public class MinecartBogeyBlock extends AbstractBogeyBlock<MinecartBogeyBlockEntity> {
+              public MinecartBogeyBlock(Properties properties) {
+                  super(properties, BogeySizes.SMALL);
+              }
+
+              @Override
+              public TrackMaterial.TrackType getTrackType(BogeyStyle style) {
+                  return RWGauges.narrow();
+              }
+
+              @Override
+              public double getWheelPointSpacing() {
+                  return 2;
+              }
+
+              @Override
+              public double getWheelRadius() {
+                  return 6.5 / 16d;
+              }
+
+              @Override
+              public Vec3 getConnectorAnchorOffset() {
+                  return new Vec3(0, 7 / 32f, 1);
+              }
+
+              @Override
+              public BogeyStyle getDefaultStyle() {
+                  return RWBogeys.BRASS_MINECART;
+              }
+
+              @Override
+              public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos,
+                                                 Player player) {
+                  return AllBlocks.RAILWAY_CASING.asStack();
+              }
+
+              @Override
+              public Class<MinecartBogeyBlockEntity> getBlockEntityClass() {
+                  return MinecartBogeyBlockEntity.class;
+              }
+
+              @Override
+              public BlockEntityType<? extends MinecartBogeyBlockEntity> getBlockEntityType() {
+                  return RWBlockEntities.MINECART_BOGEY.get();
+              }
+          }
+          EOF_N101
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/MinecartBogeyBlockEntity.java')"
+          cat > 'src/main/java/com/example/railworks/MinecartBogeyBlockEntity.java' <<'EOF_N102'
+          package com.example.railworks;
+
+          import com.simibubi.create.content.trains.bogey.AbstractBogeyBlockEntity;
+          import com.simibubi.create.content.trains.bogey.BogeyStyle;
+
+          import net.minecraft.core.BlockPos;
+          import net.minecraft.world.level.block.entity.BlockEntityType;
+          import net.minecraft.world.level.block.state.BlockState;
+
+          public class MinecartBogeyBlockEntity extends AbstractBogeyBlockEntity {
+              public MinecartBogeyBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+                  super(type, pos, state);
+              }
+
+              @Override
+              public BogeyStyle getDefaultStyle() {
+                  return RWBogeys.BRASS_MINECART;
+              }
+          }
+          EOF_N102
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/RWPonderPlugin.java')"
+          cat > 'src/main/java/com/example/railworks/RWPonderPlugin.java' <<'EOF_N103'
+          package com.example.railworks;
+
+          import com.mojang.logging.LogUtils;
+
+          import net.createmod.ponder.api.registration.PonderPlugin;
+          import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
+          import net.minecraft.resources.ResourceLocation;
+
+          import org.slf4j.Logger;
+
+          /** Registers the Railworks Ponder scenes (hold W over the item in the inventory to see them). */
+          public class RWPonderPlugin implements PonderPlugin {
+              private static final Logger LOGGER = LogUtils.getLogger();
+              private static final ResourceLocation RAILWAY_CASING =
+                      ResourceLocation.fromNamespaceAndPath("create", "railway_casing");
+
+              @Override
+              public String getModId() {
+                  return Railworks.MODID;
+              }
+
+              @Override
+              public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
+                  LOGGER.info("Railworks: registering Ponder scenes (brass track, minecart gauge track, railway casing)");
+
+                  helper.forComponents(RWBlocks.BRASS_TRACK.getId())
+                          .addStoryBoard("brass_track", RWPonderScenes::brassTrack);
+
+                  helper.forComponents(RWBlocks.BRASS_MINECART_TRACK.getId())
+                          .addStoryBoard("minecart_gauge", RWPonderScenes::minecartGauge);
+
+                  // The Railway Casing (train casing) gets both scenes: what it does, and how to change to the Brass Bogey.
+                  helper.forComponents(RAILWAY_CASING)
+                          .addStoryBoard("railway_casing", RWPonderScenes::railwayCasing)
+                          .addStoryBoard("bogey_switch", RWPonderScenes::bogeySwitch);
+              }
+          }
+          EOF_N103
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/RWPonderScenes.java')"
+          cat > 'src/main/java/com/example/railworks/RWPonderScenes.java' <<'EOF_N104'
+          package com.example.railworks;
+
+          import net.createmod.ponder.api.scene.SceneBuilder;
+          import net.createmod.ponder.api.scene.SceneBuildingUtil;
+          import net.minecraft.core.Direction;
+          import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
+          /**
+           * Scene layouts (schematics live in assets/railworks/ponder/):
+           * floor at y=0, track along z at y=1, bogey blocks at y=2 (a bogey block sits on top of its track).
+           */
+          public class RWPonderScenes {
+
+              public static void brassTrack(SceneBuilder scene, SceneBuildingUtil util) {
+                  scene.title("brass_track", "Brass Train Track");
+                  scene.configureBasePlate(0, 0, 5);
+                  scene.world().showSection(util.select().layer(0), Direction.UP);
+                  scene.idle(10);
+
+                  // schematic: Create track on z 0-1, Brass track on z 2-4, Brass bogey on top at z 2
+                  scene.world().showSection(util.select().fromTo(2, 1, 2, 2, 1, 4), Direction.DOWN);
+                  scene.idle(10);
+                  scene.overlay().showText(70)
+                          .text("Brass Train Track is laid down just like any other Create track")
+                          .pointAt(util.vector().topOf(2, 1, 3))
+                          .placeNearTarget();
+                  scene.idle(80);
+
+                  scene.world().showSection(util.select().position(2, 2, 2), Direction.DOWN);
+                  scene.idle(10);
+                  scene.overlay().showText(70)
+                          .text("Brass Bogeys ride on it...")
+                          .attachKeyFrame()
+                          .pointAt(util.vector().topOf(2, 2, 2))
+                          .placeNearTarget();
+                  scene.idle(80);
+
+                  scene.world().showSection(util.select().fromTo(2, 1, 0, 2, 1, 1), Direction.DOWN);
+                  scene.idle(10);
+                  scene.overlay().showText(90)
+                          .text("...and on regular Create tracks too, so mixing track types no longer derails the train")
+                          .attachKeyFrame()
+                          .pointAt(util.vector().topOf(2, 1, 0))
+                          .placeNearTarget();
+                  scene.idle(100);
+              }
+
+              public static void minecartGauge(SceneBuilder scene, SceneBuildingUtil util) {
+                  scene.title("minecart_gauge", "Brass Minecart Gauge Track");
+                  scene.configureBasePlate(0, 0, 5);
+                  scene.world().showSection(util.select().layer(0), Direction.UP);
+                  scene.idle(10);
+
+                  // schematic: Brass track at x=1, Minecart gauge track at x=3, bogeys on top at z=2
+                  scene.world().showSection(util.select().fromTo(1, 1, 0, 1, 1, 4), Direction.DOWN);
+                  scene.world().showSection(util.select().fromTo(3, 1, 0, 3, 1, 4), Direction.DOWN);
+                  scene.idle(10);
+                  scene.overlay().showText(80)
+                          .text("The Minecart Gauge track is the narrow Steam 'n' Rails gauge, in Brass style (right)")
+                          .pointAt(util.vector().topOf(3, 1, 3))
+                          .placeNearTarget();
+                  scene.idle(90);
+
+                  scene.world().showSection(util.select().position(1, 2, 2), Direction.DOWN);
+                  scene.world().showSection(util.select().position(3, 2, 2), Direction.DOWN);
+                  scene.idle(10);
+                  scene.overlay().showText(80)
+                          .text("The Brass Minecart Bogey is the matching narrow bogey")
+                          .attachKeyFrame()
+                          .pointAt(util.vector().topOf(3, 2, 2))
+                          .placeNearTarget();
+                  scene.idle(90);
+
+                  scene.overlay().showText(90)
+                          .text("Only narrow gauge bogeys can ride it. A Brass Track can be crafted into a Minecart Gauge Track and back")
+                          .attachKeyFrame()
+                          .pointAt(util.vector().topOf(2, 1, 0))
+                          .placeNearTarget();
+                  scene.idle(100);
+              }
+
+              public static void bogeySwitch(SceneBuilder scene, SceneBuildingUtil util) {
+                  scene.title("bogey_switch", "Switching Bogey Types");
+                  scene.configureBasePlate(0, 0, 5);
+                  scene.world().showSection(util.select().layer(0), Direction.UP);
+                  scene.idle(5);
+                  scene.world().showSection(util.select().fromTo(2, 1, 0, 2, 1, 4), Direction.DOWN);
+                  scene.idle(5);
+                  scene.world().showSection(util.select().position(2, 2, 2), Direction.DOWN);
+                  scene.idle(10);
+
+                  scene.overlay().showText(70)
+                          .text("Hold a Railway Casing and look at a bogey")
+                          .pointAt(util.vector().topOf(2, 2, 2))
+                          .placeNearTarget();
+                  scene.idle(80);
+
+                  scene.overlay().showText(80)
+                          .text("Press Left Alt to switch it to the next bogey type of the same size and gauge")
+                          .attachKeyFrame()
+                          .pointAt(util.vector().topOf(2, 2, 2))
+                          .placeNearTarget();
+                  scene.idle(30);
+                  scene.world().replaceBlocks(util.select().position(2, 2, 2),
+                          RWBlocks.BRASS_BOGEY.getDefaultState()
+                                  .setValue(BlockStateProperties.HORIZONTAL_AXIS, Direction.Axis.Z),
+                          true);
+                  scene.idle(60);
+
+                  scene.overlay().showText(90)
+                          .text("Bogeys from other Create addons are included. The key can be rebound in the Controls menu")
+                          .pointAt(util.vector().topOf(2, 2, 2))
+                          .placeNearTarget();
+                  scene.idle(100);
+              }
+
+              public static void railwayCasing(SceneBuilder scene, SceneBuildingUtil util) {
+                  scene.title("railway_casing", "Railway Casing");
+                  scene.configureBasePlate(0, 0, 5);
+                  scene.world().showSection(util.select().layer(0), Direction.UP);
+                  scene.idle(5);
+                  scene.world().showSection(util.select().fromTo(2, 1, 0, 2, 1, 4), Direction.DOWN);
+                  scene.idle(5);
+                  scene.world().showSection(util.select().position(2, 2, 2), Direction.DOWN);
+                  scene.idle(10);
+
+                  scene.overlay().showText(80)
+                          .text("The Railway Casing is the key item for Railworks bogeys. Brass Bogeys have no item of their own and drop a Railway Casing when broken")
+                          .pointAt(util.vector().topOf(2, 2, 2))
+                          .placeNearTarget();
+                  scene.idle(90);
+
+                  scene.overlay().showText(80)
+                          .text("Hold it while looking at a bogey to change the bogey type. The next scene shows how")
+                          .attachKeyFrame()
+                          .pointAt(util.vector().topOf(2, 2, 2))
+                          .placeNearTarget();
+                  scene.idle(90);
+              }
+          }
+          EOF_N104
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass_minecart/obj_track.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass_minecart/obj_track.json' <<'EOF_N105'
+          {"ambientocclusion":false,"textures":{"0":"railworks:block/brass_track","1":"railworks:block/brass_track_mip","2":"railworks:block/brass_track_crossing","particle":"create:block/palettes/stone_types/polished/andesite_cut_polished"}}
+          EOF_N105
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass_minecart/tie.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass_minecart/tie.json' <<'EOF_N106'
+          {"parent":"railworks:block/track/brass_minecart/obj_track","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/tie.obj","render_type":"minecraft:cutout_mipped","transform":{"origin":"center","scale":[0.6,1,1]}}
+          EOF_N106
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass_minecart/segment_left.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass_minecart/segment_left.json' <<'EOF_N107'
+          {"parent":"railworks:block/track/brass_minecart/obj_track","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/segment_left.obj","transform":{"origin":"center","scale":[0.6,1,1]}}
+          EOF_N107
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass_minecart/segment_right.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass_minecart/segment_right.json' <<'EOF_N108'
+          {"parent":"railworks:block/track/brass_minecart/obj_track","loader":"neoforge:obj","flip_v":true,"model":"create:models/block/track/segment_right.obj","transform":{"origin":"center","scale":[0.6,1,1]}}
+          EOF_N108
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass_minecart/ascending.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass_minecart/ascending.json' <<'EOF_N109'
+          {"loader":"neoforge:obj","ambientocclusion":false,"flip_v":true,"model":"create:models/block/track/ascending.obj","textures":{"0":"railworks:block/brass_track","1":"railworks:block/brass_track_mip","particle":"create:block/palettes/stone_types/polished/andesite_cut_polished"},"transform":{"origin":"center","scale":[0.6,1,1]}}
+          EOF_N109
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass_minecart/x_ortho.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass_minecart/x_ortho.json' <<'EOF_N110'
+          {"parent":"create:block/track/x_ortho","textures":{"1":"railworks:block/brass_track","2":"railworks:block/brass_track_mip","particle":"create:block/palettes/stone_types/polished/andesite_cut_polished"},"transform":{"origin":"center","scale":[1,1,0.6]}}
+          EOF_N110
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/block/track/brass_minecart/z_ortho.json')"
+          cat > 'src/main/resources/assets/railworks/models/block/track/brass_minecart/z_ortho.json' <<'EOF_N111'
+          {"parent":"create:block/track/z_ortho","textures":{"1":"railworks:block/brass_track","2":"railworks:block/brass_track_mip","particle":"create:block/palettes/stone_types/polished/andesite_cut_polished"},"transform":{"origin":"center","scale":[0.6,1,1]}}
+          EOF_N111
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/blockstates/brass_minecart_track.json')"
+          cat > 'src/main/resources/assets/railworks/blockstates/brass_minecart_track.json' <<'EOF_N112'
+          {"variants":{"shape=ae,turn=false,waterlogged=false":{"model":"railworks:block/track/brass_minecart/ascending","y":270},"shape=ae,turn=false,waterlogged=true":{"model":"railworks:block/track/brass_minecart/ascending","y":270},"shape=ae,turn=true,waterlogged=false":{"model":"railworks:block/track/brass_minecart/ascending","y":270},"shape=ae,turn=true,waterlogged=true":{"model":"railworks:block/track/brass_minecart/ascending","y":270},"shape=an,turn=false,waterlogged=false":{"model":"railworks:block/track/brass_minecart/ascending","y":180},"shape=an,turn=false,waterlogged=true":{"model":"railworks:block/track/brass_minecart/ascending","y":180},"shape=an,turn=true,waterlogged=false":{"model":"railworks:block/track/brass_minecart/ascending","y":180},"shape=an,turn=true,waterlogged=true":{"model":"railworks:block/track/brass_minecart/ascending","y":180},"shape=as,turn=false,waterlogged=false":{"model":"railworks:block/track/brass_minecart/ascending"},"shape=as,turn=false,waterlogged=true":{"model":"railworks:block/track/brass_minecart/ascending"},"shape=as,turn=true,waterlogged=false":{"model":"railworks:block/track/brass_minecart/ascending"},"shape=as,turn=true,waterlogged=true":{"model":"railworks:block/track/brass_minecart/ascending"},"shape=aw,turn=false,waterlogged=false":{"model":"railworks:block/track/brass_minecart/ascending","y":90},"shape=aw,turn=false,waterlogged=true":{"model":"railworks:block/track/brass_minecart/ascending","y":90},"shape=aw,turn=true,waterlogged=false":{"model":"railworks:block/track/brass_minecart/ascending","y":90},"shape=aw,turn=true,waterlogged=true":{"model":"railworks:block/track/brass_minecart/ascending","y":90},"shape=cr_d,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/cross_diag"},"shape=cr_d,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/cross_diag"},"shape=cr_d,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/cross_diag"},"shape=cr_d,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/cross_diag"},"shape=cr_ndx,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/cross_d2_xo"},"shape=cr_ndx,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/cross_d2_xo"},"shape=cr_ndx,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/cross_d2_xo"},"shape=cr_ndx,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/cross_d2_xo"},"shape=cr_ndz,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/cross_d2_zo"},"shape=cr_ndz,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/cross_d2_zo"},"shape=cr_ndz,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/cross_d2_zo"},"shape=cr_ndz,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/cross_d2_zo"},"shape=cr_o,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/cross_ortho"},"shape=cr_o,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/cross_ortho"},"shape=cr_o,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/cross_ortho"},"shape=cr_o,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/cross_ortho"},"shape=cr_pdx,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/cross_d1_xo"},"shape=cr_pdx,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/cross_d1_xo"},"shape=cr_pdx,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/cross_d1_xo"},"shape=cr_pdx,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/cross_d1_xo"},"shape=cr_pdz,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/cross_d1_zo"},"shape=cr_pdz,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/cross_d1_zo"},"shape=cr_pdz,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/cross_d1_zo"},"shape=cr_pdz,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/cross_d1_zo"},"shape=nd,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/diag_2"},"shape=nd,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/diag_2"},"shape=nd,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/diag_2"},"shape=nd,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/diag_2"},"shape=none,turn=false,waterlogged=false":{"model":"minecraft:block/air"},"shape=none,turn=false,waterlogged=true":{"model":"minecraft:block/air"},"shape=none,turn=true,waterlogged=false":{"model":"minecraft:block/air"},"shape=none,turn=true,waterlogged=true":{"model":"minecraft:block/air"},"shape=pd,turn=false,waterlogged=false":{"model":"railworks:block/track/brass/diag"},"shape=pd,turn=false,waterlogged=true":{"model":"railworks:block/track/brass/diag"},"shape=pd,turn=true,waterlogged=false":{"model":"railworks:block/track/brass/diag"},"shape=pd,turn=true,waterlogged=true":{"model":"railworks:block/track/brass/diag"},"shape=te,turn=false,waterlogged=false":{"model":"create:block/track/teleport","y":270},"shape=te,turn=false,waterlogged=true":{"model":"create:block/track/teleport","y":270},"shape=te,turn=true,waterlogged=false":{"model":"create:block/track/teleport","y":270},"shape=te,turn=true,waterlogged=true":{"model":"create:block/track/teleport","y":270},"shape=tn,turn=false,waterlogged=false":{"model":"create:block/track/teleport","y":180},"shape=tn,turn=false,waterlogged=true":{"model":"create:block/track/teleport","y":180},"shape=tn,turn=true,waterlogged=false":{"model":"create:block/track/teleport","y":180},"shape=tn,turn=true,waterlogged=true":{"model":"create:block/track/teleport","y":180},"shape=ts,turn=false,waterlogged=false":{"model":"create:block/track/teleport"},"shape=ts,turn=false,waterlogged=true":{"model":"create:block/track/teleport"},"shape=ts,turn=true,waterlogged=false":{"model":"create:block/track/teleport"},"shape=ts,turn=true,waterlogged=true":{"model":"create:block/track/teleport"},"shape=tw,turn=false,waterlogged=false":{"model":"create:block/track/teleport","y":90},"shape=tw,turn=false,waterlogged=true":{"model":"create:block/track/teleport","y":90},"shape=tw,turn=true,waterlogged=false":{"model":"create:block/track/teleport","y":90},"shape=tw,turn=true,waterlogged=true":{"model":"create:block/track/teleport","y":90},"shape=xo,turn=false,waterlogged=false":{"model":"railworks:block/track/brass_minecart/x_ortho"},"shape=xo,turn=false,waterlogged=true":{"model":"railworks:block/track/brass_minecart/x_ortho"},"shape=xo,turn=true,waterlogged=false":{"model":"railworks:block/track/brass_minecart/x_ortho"},"shape=xo,turn=true,waterlogged=true":{"model":"railworks:block/track/brass_minecart/x_ortho"},"shape=zo,turn=false,waterlogged=false":{"model":"railworks:block/track/brass_minecart/z_ortho"},"shape=zo,turn=false,waterlogged=true":{"model":"railworks:block/track/brass_minecart/z_ortho"},"shape=zo,turn=true,waterlogged=false":{"model":"railworks:block/track/brass_minecart/z_ortho"},"shape=zo,turn=true,waterlogged=true":{"model":"railworks:block/track/brass_minecart/z_ortho"}}}
+          EOF_N112
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/blockstates/brass_minecart_bogey.json')"
+          cat > 'src/main/resources/assets/railworks/blockstates/brass_minecart_bogey.json' <<'EOF_N113'
+          {"variants":{"axis=x,waterlogged=false":{"model":"create:block/track/bogey/top","y":90},"axis=x,waterlogged=true":{"model":"create:block/track/bogey/top","y":90},"axis=z,waterlogged=false":{"model":"create:block/track/bogey/top"},"axis=z,waterlogged=true":{"model":"create:block/track/bogey/top"}}}
+          EOF_N113
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/models/item/brass_minecart_track.json')"
+          cat > 'src/main/resources/assets/railworks/models/item/brass_minecart_track.json' <<'EOF_N114'
+          {"parent":"minecraft:item/generated","textures":{"layer0":"railworks:item/brass_minecart_track"}}
+          EOF_N114
+          mkdir -p "$(dirname 'src/main/resources/data/railworks/loot_table/blocks/brass_minecart_track.json')"
+          cat > 'src/main/resources/data/railworks/loot_table/blocks/brass_minecart_track.json' <<'EOF_N115'
+          {"type":"minecraft:block","pools":[{"bonus_rolls":0.0,"conditions":[{"condition":"minecraft:survives_explosion"}],"entries":[{"type":"minecraft:item","name":"railworks:brass_minecart_track"}],"rolls":1.0}],"random_sequence":"railworks:blocks/brass_minecart_track"}
+          EOF_N115
+          mkdir -p "$(dirname 'src/main/resources/data/railworks/loot_table/blocks/brass_minecart_bogey.json')"
+          cat > 'src/main/resources/data/railworks/loot_table/blocks/brass_minecart_bogey.json' <<'EOF_N116'
+          {"type":"minecraft:block","pools":[{"bonus_rolls":0.0,"conditions":[{"condition":"minecraft:survives_explosion"}],"entries":[{"type":"minecraft:item","name":"create:railway_casing"}],"rolls":1.0}],"random_sequence":"railworks:blocks/brass_minecart_bogey"}
+          EOF_N116
+          mkdir -p "$(dirname 'src/main/resources/data/railworks/recipe/brass_minecart_track.json')"
+          cat > 'src/main/resources/data/railworks/recipe/brass_minecart_track.json' <<'EOF_N117'
+          {"type":"minecraft:crafting_shapeless","category":"misc","ingredients":[{"item":"railworks:brass_track"}],"result":{"id":"railworks:brass_minecart_track","count":1}}
+          EOF_N117
+          mkdir -p "$(dirname 'src/main/resources/data/railworks/recipe/brass_track_from_minecart.json')"
+          cat > 'src/main/resources/data/railworks/recipe/brass_track_from_minecart.json' <<'EOF_N118'
+          {"type":"minecraft:crafting_shapeless","category":"misc","ingredients":[{"item":"railworks:brass_minecart_track"}],"result":{"id":"railworks:brass_track","count":1}}
+          EOF_N118
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/textures/item/brass_minecart_track.png')"
+          base64 -d > 'src/main/resources/assets/railworks/textures/item/brass_minecart_track.png' <<'EOF_N119'
+          iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABRklEQVR4nM2SMUgCYRiGn5OWlop0
+          KIRUEDEhh5CCUnQ5WhoEx0ZHG4NGaXeUNpd2saEhcJJ0MhwM7gQDvQPhwO6EI4SiuCaPTlMbGvq2
+          n+9/n+/5P37495VOBK1FfeG3gHjUi6wYlO6eHBnXMsBwNOYqe0y9PSCTCi03SCeC1u3DswBQyCUt
+          WTFwCXCe2SdfauBeX3VYrMzTjke9RAIeACq1LsVyi8uzA0avbwDWBDIDGI7GXF+I5EsNAGTFIOx3
+          I/V0bu4l3j8+f35CIZe0JoGJcrXZJxLwIPVekBWDTl8n7HejaibVR0WAqSWKR0EyqRBST6dYblFv
+          D/BubyArBsBM2GGQPd2zdn2b9uVOX7dDAKpmAjjCjh2omomqmZwc+m3tSq1r96aDMwYAYsxn7Wyt
+          2ed5U+cCvkMWTV1aYsy38P//aX0BUdOQtT2t9+8AAAAASUVORK5CYII=
+          EOF_N119
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/ponder/brass_track.nbt')"
+          base64 -d > 'src/main/resources/assets/railworks/ponder/brass_track.nbt' <<'EOF_N120'
+          H4sIAAAAAAAC/7XUzU6EMBSG4dMfFBiTWbn2Pli7Nq7cmoJnsIGhpKdmdK5emMjETES/jWwI9G15
+          aAglkaHNvUvuiaP4MBBtpSAr/siG5kGibDkXdD26nlPicrq0OdkHt2fa7v3ATXS7VEkKA9MycNNE
+          domrFF3TlVQ+xjByTJ4lp0xe3cikj2Gq01scKNu5XjinzWGaE/vQtvzydZPOS95G5/tDiJ1UdXQi
+          z/+5dh1a/rhY27p3L6SOK2sVdFX3oelk3qG7gswYZNnH82EmYZomny5+bhTQaKAxQGN/aRRgVoBZ
+          AWYFmBVg1oBZA2YNmDVg1oDZAGYDmA1gNoDZAGYLmC1gtoDZAmYLfhvqwqxWGgU03816pTFAY/9o
+          9MWzzNTkPCQ//5XK04t+AnjdT1nLBQAA
+          EOF_N120
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/ponder/minecart_gauge.nbt')"
+          base64 -d > 'src/main/resources/assets/railworks/ponder/minecart_gauge.nbt' <<'EOF_N121'
+          H4sIAAAAAAAC/62UsW7CMBCGzz7TJmFg6tqNl2DuXHXqWhl6UIsQRz5XtDx9EwSoSgH9QvVi2f78
+          +7POckXENH7y2b9K0hAboomW5DTshKlfJBod+5LuW19LzlL1w4Lcs98ITTahkUXyyzzTHBuh48JD
+          8qHexrTW2Tx51bec/GJdUfWSYispB9GCRvrhWyG7i922/JkaGi19rVLQeOuzpDquVvJ+mKRT9uMw
+          ey/hU/7PQ/5cYB5X8j3Idv4rKJndzcI3hJZ0N6/jYq19IaYlcRv1WK5T4+7audu8H5xnDMBYgGGA
+          cVcYAzgbwNkAzgZwNoCzBZwt4GwBZws4W8CZAWcGnBlwZsCZAWcHODvA2QHODnB24Hs2A2dzgTEA
+          YwGGAcZdYfiMs73AGICxAMMA464w5vDuf5/FZ3KGjOuYQpoc+t+22hfwB32TgGAKBwAA
+          EOF_N121
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/ponder/bogey_switch.nbt')"
+          base64 -d > 'src/main/resources/assets/railworks/ponder/bogey_switch.nbt' <<'EOF_N122'
+          H4sIAAAAAAAC/43U0U6DMBTG8dOeosBMlvgCvseuvTZeeWs6PMNmhZK2RuXphWXsgjj9uCG0/5Zf
+          E0JNxLR5tNm+SEwu9ETbVJFJbhSmeZKoWO4V3Q7WS85Sz0MlmSfbCW0710sT7SHvUg690DJx10Sx
+          WXY52uZYU/0cwyAxO0klFendDkJ6DFOdP2JPxcH6JCVtPqc10Ye2lbfzIF22vD9vmTrr/es+tPK9
+          2tjYL5dIjVc2quhm70NzTPMRHiriIaTloJeLJ16eFp8efm8U0GigYaAxfzQKMCvArACzAswKMGvA
+          rAGzBswaMGvAzICZATMDZgbMDJgNYDaA2QBmA5gN+G2olVldaRTQaKBhoDH/NHr1Lj01pfTZzX+l
+          +nTQHxYTvtJsBQAA
+          EOF_N122
+          mkdir -p "$(dirname 'src/main/resources/assets/railworks/ponder/railway_casing.nbt')"
+          base64 -d > 'src/main/resources/assets/railworks/ponder/railway_casing.nbt' <<'EOF_N151'
+          H4sIAAAAAAAC/43U0U6DMBTG8dOeosBMlvgCvseuvTZeeWs6PMNmhZK2RuXphWXsgjj9uCG0/5Zf
+          E0JNxLR5tNm+SEwu9ETbVJFJbhSmeZKoWO4V3Q7WS85Sz0MlmSfbCW0710sT7SHvUg690DJx10Sx
+          WXY52uZYU/0cwyAxO0klFendDkJ6DFOdP2JPxcH6JCVtPqc10Ye2lbfzIF22vD9vmTrr/es+tPK9
+          2tjYL5dIjVc2quhm70NzTPMRHiriIaTloJeLJ16eFp8efm8U0GigYaAxfzQKMCvArACzAswKMGvA
+          rAGzBswaMGvAzICZATMDZgbMDJgNYDaA2QBmA5gN+G2olVldaRTQaKBhoDH/NHr1Lj01pfTZzX+l
+          +nTQHxYTvtJsBQAA
+          EOF_N151
+          mkdir -p "$(dirname 'src/main/java/com/example/railworks/RWGauges.java')"
+          cat > 'src/main/java/com/example/railworks/RWGauges.java' <<'EOF_N150'
+          package com.example.railworks;
+
+          import com.mojang.logging.LogUtils;
+          import com.simibubi.create.content.trains.track.TrackMaterial;
+
+          import net.minecraft.resources.ResourceLocation;
+
+          import org.slf4j.Logger;
+
+          import java.lang.reflect.Field;
+          import java.util.Collection;
+          import java.util.List;
+          import java.util.Map;
+
+          /**
+           * Finds the Steam 'n' Rails (NeoForge port, mod id "railways") narrow gauge track type, so the Minecart Gauge
+           * track and bogey share the gauge of Steam 'n' Rails narrow trains. It is looked up through Create's own
+           * track material list, so Railworks needs no compile time dependency on Steam 'n' Rails. The lookup runs once;
+           * if Steam 'n' Rails or its narrow gauge is not found the Minecart Gauge falls back to the STANDARD gauge and a
+           * warning is written to the log, so the game never crashes because of it.
+           */
+          public final class RWGauges {
+              private static final Logger LOGGER = LogUtils.getLogger();
+              private static TrackMaterial.TrackType narrow;
+
+              private RWGauges() {
+              }
+
+              public static synchronized TrackMaterial.TrackType narrow() {
+                  if (narrow == null) {
+                      TrackMaterial.TrackType found = find();
+                      if (found != null) {
+                          LOGGER.info("Railworks: Minecart Gauge is using the Steam 'n' Rails narrow gauge");
+                          narrow = found;
+                      } else {
+                          LOGGER.warn("Railworks: Steam 'n' Rails narrow gauge was not found, "
+                                  + "the Minecart Gauge falls back to the standard gauge");
+                          narrow = TrackMaterial.TrackType.STANDARD;
+                      }
+                  }
+                  return narrow;
+              }
+
+              private static TrackMaterial.TrackType find() {
+                  try {
+                      Object all = TrackMaterial.class.getField("ALL").get(null);
+                      Collection<?> materials = all instanceof Map<?, ?> map ? map.values()
+                              : all instanceof Collection<?> c ? c : List.of();
+                      for (Object material : materials) {
+                          Object id = read(material, "id");
+                          if (!(id instanceof ResourceLocation rl)) continue;
+                          if (!"railways".equals(rl.getNamespace()) || !rl.getPath().contains("narrow")) continue;
+                          if (read(material, "trackType") instanceof TrackMaterial.TrackType type) {
+                              return type;
+                          }
+                      }
+                  } catch (ReflectiveOperationException | RuntimeException e) {
+                      LOGGER.warn("Railworks: could not look up Steam 'n' Rails track materials", e);
+                  }
+                  return null;
+              }
+
+              private static Object read(Object target, String name) throws ReflectiveOperationException {
+                  Field field;
+                  try {
+                      field = target.getClass().getField(name);
+                  } catch (NoSuchFieldException e) {
+                      field = target.getClass().getDeclaredField(name);
+                      field.setAccessible(true);
+                  }
+                  return field.get(target);
+              }
+          }
+          EOF_N150
+
+      - name: Build jar
+        run: gradle build --no-daemon
+
+      - name: Show jar
+        run: ls -la build/libs
+
+      - name: Upload jar (download button, no zip)
+        uses: actions/upload-artifact@v7
+        with:
+          path: build/libs/railworks-1.4.0.jar
+          archive: false
+          if-no-files-found: error
+
+      - name: Publish jar to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/libs/*.jar
